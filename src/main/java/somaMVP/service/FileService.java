@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import somaMVP.annotation.RunningTime;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class FileService {
 
     @Value("${user.home}")
     private String uploadDir;
+    @RunningTime
     public void fileUpload(MultipartFile multipartFile) {
         Path serverPath = Paths.get(
                 uploadDir +

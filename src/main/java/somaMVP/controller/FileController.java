@@ -23,9 +23,7 @@ public class FileController {
         return "content/upload";
     }
     @GetMapping("/success")
-    public String success() {
-        return "파일 저장 완료!";
-    }
+    public String success() { return "redirect:";}
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         fileService.fileUpload(file);
