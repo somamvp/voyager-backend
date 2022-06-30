@@ -2,28 +2,31 @@ package somaMVP.controller;
 
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import somaMVP.service.FileService;
 
 import java.net.http.HttpHeaders;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class FileController {
     private final FileService fileService;
 
+    @GetMapping
+    public String index() {
+        return "redirect:/upload";
+    }
     @GetMapping("/upload")
     public String upload() {
-        return "upload";
+        return "content/upload";
     }
-
     @GetMapping("/success")
     public String success() {
-        return "success";
+        return "파일 저장 완료!";
     }
-
-    @PostMapping("/api/v1/file")
+    @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         fileService.fileUpload(file);
         return "redirect:/success";
