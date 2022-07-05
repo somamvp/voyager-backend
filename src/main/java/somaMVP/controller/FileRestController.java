@@ -1,47 +1,38 @@
 package somaMVP.controller;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import somaMVP.response.ImageResponse;
 import somaMVP.service.FileService;
 
-import javax.sound.midi.Sequence;
-import java.awt.*;
-import java.net.http.HttpHeaders;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class FileController {
-    @Autowired
+public class FileRestController {
     private final FileService fileService;
-    private int cnt = 0;
-    @GetMapping
-    public String index() {
-        return "redirect:/upload";
-    }
-    @GetMapping("/upload")
-    public String upload() {
-        return "content/upload";
-    }
-    @GetMapping("/success")
-    public String success() { return "redirect:";}
+    private ImageResponse imageResponse = new ImageResponse(0);
+    private List<byte[]> multipartFiles = new ArrayList<>(2);
+    private List<String> fileNames = new ArrayList<>(2);
     @PostMapping("/upload")
-    @ResponseBody
-    public Map<String, Object> uploadFile(@RequestParam("img") MultipartFile file) {
-        this.fileService.fileUpload(file);
-        Map<String, Object> rtn = new LinkedHashMap<>();
-        rtn.put("sequenceNo", ++cnt);
-        return rtn;
+    public ResponseEntity<?> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
+        multipartFiles.add(file.getInputStream().readAllBytes());
+        fileNames.add(file.getOriginalFilename());
+        if((++imageResponse.sequenceNo) % 1 == 0){
+            fileService.fileUpload(multipartFiles, fileNames);
+            multipartFiles.clear();
+            fileNames.clear();
+        }
+        return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }
 }
