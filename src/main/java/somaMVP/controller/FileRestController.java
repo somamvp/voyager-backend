@@ -21,18 +21,19 @@ import java.util.Map;
 @Slf4j
 public class FileRestController {
     private final FileService fileService;
-    private final ImageResponse imageResponse = new ImageResponse(0);
-    private final int loofCount = 1;
+    public final ImageResponse imageResponse = new ImageResponse(0);
+    public static int loofCount = 2; // % 몇 회 요청이 들어왔을 때 업로드 메소드를 수행 할지 셋팅.
     private final List<byte[]> multipartFiles = new ArrayList<>(loofCount);
     private final List<String> fileNames = new ArrayList<>(loofCount);
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
         multipartFiles.add(file.getInputStream().readAllBytes());
         fileNames.add(file.getOriginalFilename());
-        if((++imageResponse.sequenceNo) % loofCount == 0){ // % 1 몇 회 요청이 들어왔을 때 업로드를 실행 할지.
-            fileService.fileUpload(multipartFiles, fileNames);
-            multipartFiles.clear();
-            fileNames.clear();
+        log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
+        if((imageResponse.sequenceNo) % loofCount == 0){
+            fileService.fileUpload(multipartFiles, fileNames); // 파일 업로드 수행
+            multipartFiles.clear(); // 버퍼 비우기
+            fileNames.clear(); // 버퍼 비우기
         }
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }
