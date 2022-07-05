@@ -21,14 +21,14 @@ import java.util.Map;
 @Slf4j
 public class FileRestController {
     private final FileService fileService;
-    private ImageResponse imageResponse = new ImageResponse(0);
-    private List<byte[]> multipartFiles = new ArrayList<>(2);
-    private List<String> fileNames = new ArrayList<>(2);
+    private final ImageResponse imageResponse = new ImageResponse(0);
+    private final List<byte[]> multipartFiles = new ArrayList<>(2);
+    private final List<String> fileNames = new ArrayList<>(2);
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
         multipartFiles.add(file.getInputStream().readAllBytes());
         fileNames.add(file.getOriginalFilename());
-        if((++imageResponse.sequenceNo) % 1 == 0){
+        if((++imageResponse.sequenceNo) % 1 == 0){ // % 1 몇 회 요청이 들어왔을 때 업로드를 실행 할지.
             fileService.fileUpload(multipartFiles, fileNames);
             multipartFiles.clear();
             fileNames.clear();
