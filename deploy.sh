@@ -14,4 +14,4 @@ sudo ./gradlew build
 
 # 4
 echo "> jar 파일 ec2로 전송"
-scp -i ~/.ssh/somaMVP.pem -r ./build/libs/demo-0.0.1-SNAPSHOT.jar ec2-user@ec2-13-125-200-220.ap-northeast-2.compute.amazonaws.com:~/deploy
+scp -i ~/.ssh/somaMVP.pem -r ./build/libs/demo-0.0.1-SNAPSHOT.jar ec2-user@ec2-52-78-57-169.ap-northeast-2.compute.amazonaws.com:~/deploy

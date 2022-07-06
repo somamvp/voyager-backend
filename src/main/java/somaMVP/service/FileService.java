@@ -10,7 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
-import static somaMVP.controller.FileRestController.loofCount;
+
+import static somaMVP.intercepter.ClearInterceptor.loofCount;
 
 @Service
 @NoArgsConstructor
@@ -35,7 +36,6 @@ public class FileService {
                             File.separator + // 다른 OS 환경 구분자 호환 용도
                             StringUtils.cleanPath(originNames));
             log.info("[{}번]{} -> {}", imageNumber, attachFileLocation, serverPath.toAbsolutePath());
-
         try {
             //Files.copy(file.getInputStream(), serverPath, StandardCopyOption.REPLACE_EXISTING);
             Files.write(serverPath, file); // Inputstream 버퍼로 File.copy를 실행하면 에러가 나기 때문에 write 사용.
