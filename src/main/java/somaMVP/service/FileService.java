@@ -21,8 +21,8 @@ public class FileService {
     private String attachFileLocation;
     @Value("${user.home}")
     private String uploadDir;
-    public int imageNumber = 0;
-    public String originNames;
+    private int imageNumber = 0;
+    private String originNames;
     @RunningTime
     public void fileUpload(List<byte[]> multipartFile, List<String> originName) {
         if (multipartFile.isEmpty()) {
