@@ -19,8 +19,8 @@ import static somaMVP.intercepter.ClearInterceptor.loofCount;
 @Slf4j
 public class FileRestController {
     private final FileService fileService;
-    public final ImageResponse imageResponse = new ImageResponse(0);
-    public ClearInterceptor cleanInter = new ClearInterceptor();
+    public final ImageResponse imageResponse;
+    public final ClearInterceptor cleanInter;
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
         cleanInter.multipartFiles.add(file.getInputStream().readAllBytes());

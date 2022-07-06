@@ -1,14 +1,12 @@
 package somaMVP.intercepter;
 
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import somaMVP.service.FileService;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 @Setter
+@Component
 public class ClearInterceptor {
     public static int loofCount = 1; // % 몇 회 요청이 들어왔을 때 업로드 메소드를 수행 할지 셋팅.
     public final List<byte[]> multipartFiles = new ArrayList<>(loofCount);
