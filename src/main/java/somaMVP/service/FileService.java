@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import somaMVP.annotation.RunningTime;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.*;
 import java.util.List;
 
@@ -45,5 +46,8 @@ public class FileService {
                     e.getMessage());
           }
         }
+    }
+
+    public void fileUpload(ByteBuffer payload) {
     }
 }
