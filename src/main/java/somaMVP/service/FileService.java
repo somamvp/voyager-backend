@@ -6,8 +6,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.BinaryMessage;
-import org.springframework.web.socket.WebSocketSession;
 import somaMVP.annotation.RunningTime;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -83,5 +91,20 @@ public class FileService {
                 e.printStackTrace();
             }
         }
+    }
+    @RunningTime
+        public void Base64ToImgDecoder(String base64){
+        log.info("Base64ToImgDecoder 실행");
+            String data = base64;
+            log.info("data = {}", data);
+            String fileName = "socketTest.jpg";
+            byte[] imageBytes = DatatypeConverter.parseBase64Binary(data);
+            try {
+                BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imageBytes));
+                ImageIO.write(bufImg, "jpg", new File(uploadDir, fileName));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
 }

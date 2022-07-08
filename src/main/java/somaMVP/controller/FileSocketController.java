@@ -20,15 +20,17 @@ public class FileSocketController {
     private final FileService fileService;
     public final ImageResponse imageResponse;
 
-    @MessageMapping("/img")
-    public void binary(BinaryMessage message) {
-        log.info("Socket /upload 요청 {} 받음", ++imageResponse.sequenceNo);
-        fileService.handleBinaryMessage(message);
-        sendingOperations.convertAndSend("/sub/upload", imageResponse);
-    }
     @MessageMapping("/upload")
-    public void upload(ImageResponse img) {
+    public void binary(String message) {
         log.info("Socket /upload 요청 {} 받음", ++imageResponse.sequenceNo);
+        //fileService.handleBinaryMessage(message);
+        fileService.Base64ToImgDecoder(message);
         sendingOperations.convertAndSend("/sub/upload", imageResponse);
     }
+    @MessageMapping("/test")
+    public void upload(String message) {
+        log.info("Socket /test 요청 {} 받음", ++imageResponse.sequenceNo);
+        sendingOperations.convertAndSend("/sub/upload", imageResponse);
+    }
+
 }
