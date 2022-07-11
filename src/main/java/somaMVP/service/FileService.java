@@ -5,19 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.socket.BinaryMessage;
 import somaMVP.annotation.RunningTime;
-
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.*;
+import java.util.Base64;
 import java.util.List;
 
 import static somaMVP.intercepter.ClearInterceptor.loofCount;
@@ -32,6 +24,10 @@ public class FileService {
     private String uploadDir;
     private int imageNumber = 0;
     private String originNames;
+    Path serverPath = Paths.get(
+            File.separator + "home" + File.separator + "ec2-user" +
+                    File.separator + // 다른 OS 환경 구분자 호환 용도
+                    StringUtils.cleanPath("test.jpg"));
     @RunningTime
     public void fileUpload(List<byte[]> multipartFile, List<String> originName) {
         if (multipartFile.isEmpty()) {
@@ -40,10 +36,6 @@ public class FileService {
         }
         for(byte[] file : multipartFile) {
             originNames = originName.get((imageNumber++)%loofCount);
-            Path serverPath = Paths.get(
-                    uploadDir +
-                            File.separator + // 다른 OS 환경 구분자 호환 용도
-                            StringUtils.cleanPath(originNames));
             log.info("[{}번]{} -> {}", imageNumber, attachFileLocation, serverPath.toAbsolutePath());
         try {
             //Files.copy(file.getInputStream(), serverPath, StandardCopyOption.REPLACE_EXISTING);
@@ -60,10 +52,10 @@ public class FileService {
         log.info("Base64ToImgDecoder 실행");
             String data = base64;
             String fileName = "socketTest.jpg"; // 파일 이름
-            byte[] imageBytes = DatatypeConverter.parseBase64Binary(data);
+            byte[] imageBytes = Base64.getDecoder().decode(data); // Base64 데이터를 byte 배열로 변환
             try {
-                BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imageBytes));
-                ImageIO.write(bufImg, "jpg", new File(uploadDir, fileName));
+                Files.write(serverPath, imageBytes);
+                log.info("path = {}", serverPath);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

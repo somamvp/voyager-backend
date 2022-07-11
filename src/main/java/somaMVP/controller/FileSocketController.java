@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
+import somaMVP.annotation.RunningTime;
 import somaMVP.response.ImageResponse;
 import somaMVP.service.FileService;
 
@@ -19,7 +20,7 @@ public class FileSocketController {
     private final SimpMessageSendingOperations sendingOperations;
     private final FileService fileService;
     public final ImageResponse imageResponse;
-
+    @RunningTime
     @MessageMapping("/upload")
     public void binary(String message) {
         log.info("Socket /upload 요청 {} 받음", ++imageResponse.sequenceNo);
@@ -27,6 +28,7 @@ public class FileSocketController {
         fileService.Base64ToImgDecoder(message);
         sendingOperations.convertAndSend("/sub/upload", imageResponse);
     }
+    @RunningTime
     @MessageMapping("/test")
     public void upload(String message) {
         log.info("Socket /test 요청 {} 받음", ++imageResponse.sequenceNo);
