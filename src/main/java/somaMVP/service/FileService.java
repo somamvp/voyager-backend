@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.socket.BinaryMessage;
 import somaMVP.annotation.RunningTime;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.*;
 import java.util.Base64;
 import java.util.List;
@@ -61,4 +63,18 @@ public class FileService {
                 e.printStackTrace();
             }
     }
+
+    @RunningTime
+    public void grpcUpload(byte[] imageBytes){
+        log.info("grpcUpload 실행");
+        String fileName = "socketTest.jpg"; // 파일 이름
+        try {
+            Files.write(serverPath, imageBytes);
+            log.info("path = {}", serverPath);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 }
