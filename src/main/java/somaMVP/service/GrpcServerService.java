@@ -21,7 +21,6 @@ public class GrpcServerService extends GreeterGrpc.GreeterImplBase {
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
         ByteString nameBytes = request.getName();
         byte[] bytes = nameBytes.toByteArray();
-        log.info("bytes: {}", bytes);
         fileService.grpcUpload(bytes);
         log.info("요청 {}회 = {}",++imageResponse.sequenceNo, request.getName());
         HelloReply reply = HelloReply.newBuilder()
