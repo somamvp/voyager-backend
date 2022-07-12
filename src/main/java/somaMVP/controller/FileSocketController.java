@@ -2,12 +2,9 @@ package somaMVP.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.BinaryMessage;
-import org.springframework.web.socket.TextMessage;
 import somaMVP.annotation.RunningTime;
 import somaMVP.response.ImageResponse;
 import somaMVP.service.FileService;
@@ -24,8 +21,7 @@ public class FileSocketController {
     @MessageMapping("/upload")
     public void binary(String message) {
         log.info("Socket /upload 요청 {} 받음", ++imageResponse.sequenceNo);
-        //fileService.handleBinaryMessage(message);
-        fileService.Base64ToImgDecoder(message);
+        fileService.base64ToImgDecoder(message);
         sendingOperations.convertAndSend("/sub/upload", imageResponse);
     }
     @RunningTime

@@ -16,15 +16,8 @@ import somaMVP.response.ImageResponse;
 public class GrpcServerService extends GreeterGrpc.GreeterImplBase {
     private final FileService fileService;
     private final ImageResponse imageResponse;
-//    @Override
-//    public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-//        HelloReply reply = HelloReply.newBuilder()
-//                .setMessage("Hello ==> " + request.getName())
-//                .build();
-//        responseObserver.onNext(reply);
-//        responseObserver.onCompleted();
-//    }
     @RunningTime
+    @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
         ByteString nameBytes = request.getName();
         byte[] bytes = nameBytes.toByteArray();

@@ -12,7 +12,7 @@ import somaMVP.service.FileService;
 
 import java.io.IOException;
 
-import static somaMVP.intercepter.ClearInterceptor.loofCount;
+import static somaMVP.intercepter.ClearInterceptor.FILE_ROOF_COUNT;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,11 +22,11 @@ public class FileRestController {
     public final ImageResponse imageResponse;
     public final ClearInterceptor cleanInter;
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
+    public ResponseEntity<ImageResponse> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
         cleanInter.multipartFiles.add(file.getInputStream().readAllBytes());
         cleanInter.fileNames.add(file.getOriginalFilename());
         log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
-        if((imageResponse.sequenceNo) % loofCount == 0){
+        if((imageResponse.sequenceNo) % FILE_ROOF_COUNT == 0){
             fileService.fileUpload(cleanInter.multipartFiles, cleanInter.fileNames); // 파일 업로드 수행
             cleanInter.clearList(cleanInter.multipartFiles, cleanInter.fileNames); // 업로드 후 리스트 초기화
         }
