@@ -25,7 +25,7 @@ public class FileSocketController {
         sendingOperations.convertAndSend("/sub/upload", imageResponse);
     }
     @RunningTime
-    @MessageMapping("/test")
+    @MessageMapping("/test") // 메세지 보내기
     public void upload(String message) {
         log.info("Socket /test 요청 {} 받음", ++imageResponse.sequenceNo);
         sendingOperations.convertAndSend("/sub/upload", imageResponse);
