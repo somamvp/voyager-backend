@@ -1,46 +1,79 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Gradle Package
+# Repo Action 페이지에 나타날 이름
+name: Spring Boot & Gradle CI/CD
 
+# Event Trigger
+# devolop branch에 push 또는 pull request가 발생할 경우 동작
+# branch 단위 외에도, tag나 cron 식 등을 사용할 수 있음
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ CI/CD ]
+  pull_request:
+    branches: [ CI/CD ]
 
 jobs:
   build:
-
+    # 실행 환경 지정
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
+    # Task의 sequence를 명시한다.
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
 
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
-    - name: Publish to GitHub Packages
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: publish
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Build
+      - name: Build with Gradle
+        #run: ./gradlew clean build
+        run: ./gradlew build
 
+      # 전송할 파일을 담을 디렉토리 생성
+      - name: Make Directory for deliver
+        run: mkdir deploy
+
+      # Jar 파일 Copy
+      - name: Copy Jar
+        run: cp ./build/libs/*.jar ./deploy/
+
+      # appspec.yml Copy
+      - name: Copy appspec
+        run: cp ./appspec.yml ./deploy/
+
+      # script file Copy
+      - name: Copy shell
+        run: cp ./scripts/* ./deploy/
+
+      # 압축파일 형태로 전달
+      - name: Make zip file
+        run: zip -r -qq -j ./deploy_s3.zip ./deploy/
+
+      # S3 Bucket으로 copy
+      - name: Deliver to AWS S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp \
+          --region ap-northeast-2 \
+          --acl private \
+          ./deploy_s3.zip s3://deploy_s3/
+
+      # Deploy
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws deploy create-deployment \
+          --application-name voyager-backend \
+          --deployment-group-name MVP \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=deploy_s3,bundleType=zip,key=deploy_s3.zip \
+          --region ap-northeast-2
