@@ -39,7 +39,7 @@ public class FileService {
         for(byte[] imageBytes : multipartFile) {
             //String originNames = originName.get((imageNumber++)%loofCount); // Multipart 파일 이름 읽어올 때 사용
             defaultUpload(imageBytes);
-            log.info("[{}번]{} -> {}", ++imageNumber, attachFileLocation, serverPath.toAbsolutePath());
+            log.info("[{}번]{} -> {}",++imageNumber, attachFileLocation, serverPath.toAbsolutePath());
         }
     }
     @RunningTime
