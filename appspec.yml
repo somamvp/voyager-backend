@@ -9,9 +9,8 @@ files:
 permissions:
   - object: /
     pattern: "**"
-    owner: MVP
-    group: MVP
-    mode: 755
+    owner: root
+    group: root
 
 hooks:
   AfterInstall:
