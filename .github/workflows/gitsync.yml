@@ -1,35 +1,34 @@
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+# This is a workflow that syncs everthing on this repository to another repository
 
-# Repo Action 페이지에 나타날 이름
-name: Spring Boot & Gradle CI/CD & Gitlab mirroring
+name: Sync this repository to another repository
 
-# Event Trigger
-# devolop branch에 push 또는 pull request가 발생할 경우 동작
-# branch 단위 외에도, tag나 cron 식 등을 사용할 수 있음
 on:
   push:
-    branches: [ websocket2 ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ websocket2 ]
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
-  build:
-    # 실행 환경 지정
+  push-to-gitlab:
     runs-on: ubuntu-latest
 
-    # Task의 sequence를 명시한다.
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      # Git sync
-      - name: Git Repo Sync
-        env: # Retrieve env variable from GitHub secrets
-          TARGET_URL: ${{ secrets.TARGET_URL }}
-          TARGET_USERNAME: ${{ secrets.TARGET_USERNAME }}
-          TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
+        with:
+          fetch-depth: 0 # Fetch all history for all tags and branches
+
+      - name: Set remote repository
+        env: # Retrieve env variable from GiGHub secrets
+          gitlab_url: ${{ secrets.TARGET_URL }}
+          gitlab_username: ${{ secrets.TARGET_USERNAME }}
+          gitlab_token: ${{ secrets.TARGET_TOKEN }}
         run: | # 토큰을 조합해서 저렇게 URL을 만들면 비번없이 push가 됩니다.
-          git remote add gitlab https://${TARGET_USERNAME}:${TARGET_TOKEN}@${TARGET_URL#https://};
-      # Git push
+          git remote add gitlab https://${gitlab_username}:${gitlab_token}@${gitlab_url#https://};
       - name: Force push everthing
         run: | # 모든 브랜치와 태그에 대하여 push합니다. gitlab에서 보호설정이 걸려있으면 Fail할 수 있습니다.
           git push -f --all gitlab;
