@@ -63,7 +63,7 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private \
-          ./deploy_s3.zip s3://deploy_s3/
+          ./deploy_s3.zip s3://mvp-voyager-s3/
 
       # Deploy
       - name: Deploy
