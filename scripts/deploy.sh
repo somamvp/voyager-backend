@@ -31,4 +31,4 @@ echo "> JAR Name: $JAR_NAME"
 #nohup java -jar $REPOSITORY/$JAR_NAME 2>&1 &
 echo "> 애플리케이션 배포 성공!!"
 echo "> 로그 기록"
-sudo nohup java -jar ~/$REPOSITORY/$JAR_NAME > ~/${LOG_DIR}/${JAR_NAME}.txt 2>&1
+sudo nohup java -jar ~/$REPOSITORY/$JAR_NAME > ~/${LOG_DIR}/${JAR_NAME}.txt 2>&1 &
