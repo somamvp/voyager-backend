@@ -14,7 +14,7 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: /home/juwon/deploy/deploy.sh
+    - location: /deploy/deploy.sh
       timeout: 60
       runas: juwon
 
