@@ -74,7 +74,7 @@ jobs:
           --application-name voyager-backend-deploy \
           --deployment-group-name mvp \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=deploy_s3,bundleType=zip,key=deploy_s3.zip \
+          --s3-location bucket=mvp-voyager-s3,bundleType=zip,key=deploy_s3.zip \
           --region ap-northeast-2
       # Git sync
       - name: Git Repo Sync
