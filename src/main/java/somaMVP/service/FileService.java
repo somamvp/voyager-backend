@@ -1,49 +1,80 @@
 package somaMVP.service;
 
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import somaMVP.annotation.RunningTime;
+import somaMVP.response.ImageResponse;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Base64;
 import java.util.List;
 
-import static somaMVP.intercepter.ClearInterceptor.loofCount;
+import static somaMVP.service.ClearService.*;
 
 @Service
-@NoArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class FileService {
     @Value("${attachFileLocation}")
-    private String attachFileLocation;
-    @Value("${user.home}")
-    private String uploadDir;
+    public String attachFileLocation;
+    @Value("${HOME}")
+    public String uploadDir;
     private int imageNumber = 0;
-    private String originNames;
+    private final ClearService clearService;
+    private final ImageResponse imageResponse;
+    Path serverPath = Paths.get(
+            File.separator + "home" + File.separator + "juwon" +
+                    File.separator + // 다른 OS 환경 구분자 호환 용도
+                    StringUtils.cleanPath("test.jpg"));
     @RunningTime
-    public void fileUpload(List<byte[]> multipartFile, List<String> originName) {
-        if (multipartFile.isEmpty()) {
-            log.info("multipartFile = is Empty");
+    public void httpUpload(List<byte[]> multipartFile, List<String> originName) {
+        for(byte[] imageBytes : multipartFile) {
+            //String originNames = originName.get((imageNumber++)%loofCount); // Multipart 파일 이름 읽어올 때 사용
+            defaultUpload(imageBytes);
+            log.info("[{}번]{} -> {}",++imageNumber, attachFileLocation, serverPath.toAbsolutePath());
+        }
+    }
+    @RunningTime
+    public void fileProcess(MultipartFile file) throws IOException {
+        multipartFiles.add(file.getInputStream().readAllBytes());
+        fileNames.add(file.getOriginalFilename());
+        if((imageResponse.sequenceNo) % FILE_ROOF_COUNT == 0){
+            httpUpload(multipartFiles, fileNames); // 파일 업로드 수행
+            clearService.clearList(multipartFiles, fileNames); // 업로드 후 리스트 초기화
+        }
+    }
+    @RunningTime
+        public void base64ToImgDecoder(String data){
+            log.info("Base64ToImgDecoder 실행");
+            byte[] imageBytes = Base64.getDecoder().decode(data); // Base64 데이터를 byte 배열로 변환
+            defaultUpload(imageBytes);
+    }
+
+    @RunningTime
+    public void grpcUpload(byte[] imageBytes){
+        log.info("grpcUpload 실행");
+        defaultUpload(imageBytes);
+    }
+
+    public void defaultUpload(byte[] imageBytes){
+        if (imageBytes.length == 0) {
+            log.info("imageBytes = is Empty");
             return ;
         }
-        for(byte[] file : multipartFile) {
-            originNames = originName.get((imageNumber++)%loofCount);
-            Path serverPath = Paths.get(
-                    uploadDir +
-                            File.separator + // 다른 OS 환경 구분자 호환 용도
-                            StringUtils.cleanPath(originNames));
-            log.info("[{}번]{} -> {}", imageNumber, attachFileLocation, serverPath.toAbsolutePath());
         try {
-            //Files.copy(file.getInputStream(), serverPath, StandardCopyOption.REPLACE_EXISTING);
-            Files.write(serverPath, file); // Inputstream 버퍼로 File.copy를 실행하면 에러가 나기 때문에 write 사용.
+            Files.write(serverPath, imageBytes);
+            log.info("path = {}", serverPath);
         } catch (IOException e) {
-            log.error("fail to store file : name={}, exception={}",
-                    originNames,
-                    e.getMessage());
-          }
+            e.printStackTrace();
+            log.info("IOException = {}", e.getMessage());
         }
     }
 }
