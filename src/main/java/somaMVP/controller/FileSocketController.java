@@ -1,0 +1,34 @@
+package somaMVP.controller;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.web.bind.annotation.RestController;
+import somaMVP.annotation.RunningTime;
+import somaMVP.response.ImageResponse;
+import somaMVP.service.FileService;
+
+@RestController
+@RequiredArgsConstructor
+@Slf4j
+public class FileSocketController {
+
+    private final SimpMessageSendingOperations sendingOperations;
+    private final FileService fileService;
+    public final ImageResponse imageResponse;
+    @RunningTime
+    @MessageMapping("/upload")
+    public void binary(String message) {
+        log.info("Socket /upload 요청 {} 받음", ++imageResponse.sequenceNo);
+        fileService.base64ToImgDecoder(message);
+        sendingOperations.convertAndSend("/sub/upload", imageResponse);
+    }
+    @RunningTime
+    @MessageMapping("/test") // 메세지 보내기
+    public void upload(String message) {
+        log.info("Socket /test 요청 {} 받음", ++imageResponse.sequenceNo);
+        sendingOperations.convertAndSend("/sub/upload", imageResponse);
+    }
+
+}

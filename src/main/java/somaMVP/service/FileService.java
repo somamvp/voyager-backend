@@ -1,10 +1,10 @@
 package somaMVP.service;
 
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,49 +13,68 @@ import somaMVP.response.ImageResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.util.Base64;
+import java.util.List;
 
-import static somaMVP.controller.BaseRestController.*;
+import static somaMVP.service.ClearService.*;
 
 @Service
-@NoArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class FileService {
-
     @Value("${attachFileLocation}")
-    private String attachFileLocation;
-
-    @Value("${user.home}")
-    private String uploadDir;
-    public int count = 0;
-    //public ImageResponse imageResponse = new ImageResponse(0);
+    public String attachFileLocation;
+    @Value("${HOME}")
+    public String uploadDir;
+    private int imageNumber = 0;
+    private final ClearService clearService;
+    private final ImageResponse imageResponse;
+    Path serverPath = Paths.get(
+            File.separator + "home" + File.separator + "juwon" +
+                    File.separator + // 다른 OS 환경 구분자 호환 용도
+                    StringUtils.cleanPath("test.jpg"));
     @RunningTime
-    public void fileUpload(MultipartFile multipartFile) {
-        if (multipartFile == null) {
-            log.info("create: multipartFile=null");
-            //return getErrorResponse("[Error] Fail to save a multipartFile.");
+    public void httpUpload(List<byte[]> multipartFile, List<String> originName) {
+        for(byte[] imageBytes : multipartFile) {
+            //String originNames = originName.get((imageNumber++)%loofCount); // Multipart 파일 이름 읽어올 때 사용
+            defaultUpload(imageBytes);
+            log.info("[{}번]{} -> {}",++imageNumber, attachFileLocation, serverPath.toAbsolutePath());
         }
+    }
+    @RunningTime
+    public void fileProcess(MultipartFile file) throws IOException {
+        multipartFiles.add(file.getInputStream().readAllBytes());
+        fileNames.add(file.getOriginalFilename());
+        if((imageResponse.sequenceNo) % FILE_ROOF_COUNT == 0){
+            httpUpload(multipartFiles, fileNames); // 파일 업로드 수행
+            clearService.clearList(multipartFiles, fileNames); // 업로드 후 리스트 초기화
+        }
+    }
+    @RunningTime
+        public void base64ToImgDecoder(String data){
+            log.info("Base64ToImgDecoder 실행");
+            byte[] imageBytes = Base64.getDecoder().decode(data); // Base64 데이터를 byte 배열로 변환
+            defaultUpload(imageBytes);
+    }
 
-        Path serverPath = Paths.get(
-                uploadDir +
-                        File.separator +
-                        StringUtils.cleanPath(multipartFile.getOriginalFilename()));
-        log.info("[{}번]ath : {} \n {}", ++count, serverPath.toString(), serverPath.toAbsolutePath());
+    @RunningTime
+    public void grpcUpload(byte[] imageBytes){
+        log.info("grpcUpload 실행");
+        defaultUpload(imageBytes);
+    }
 
+    public void defaultUpload(byte[] imageBytes){
+        if (imageBytes.length == 0) {
+            log.info("imageBytes = is Empty");
+            return ;
+        }
         try {
-            Files.copy(multipartFile.getInputStream(), serverPath, StandardCopyOption.REPLACE_EXISTING);
-            multipartFile.getOriginalFilename();
-            Resource resource = multipartFile.getResource();
-            //imageResponse.setSequenceNo(count);
-            // imageResponse.getSequenceNo() "sequenceNo": Int = 3333 Body의 값
+            Files.write(serverPath, imageBytes);
+            log.info("path = {}", serverPath);
         } catch (IOException e) {
-            log.error("fail to store file : name={}, exception={}",
-                    multipartFile.getOriginalFilename(),
-                    e.getMessage());
-            //return getErrorResponse("[Error] File IOException");
+            e.printStackTrace();
+            log.info("IOException = {}", e.getMessage());
         }
     }
 }
