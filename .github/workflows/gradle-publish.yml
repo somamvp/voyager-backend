@@ -79,11 +79,11 @@ jobs:
           --region ap-northeast-2
       - name: Git Repo Sync
         env: # Retrieve env variable from GiGHub secrets
-          gitlab_url: ${{ secrets.TARGET_URL }}
-          gitlab_username: ${{ secrets.TARGET_USERNAME }}
-          gitlab_token: ${{ secrets.TARGET_TOKEN }}
+          TARGET_URL: ${{ secrets.TARGET_URL }}
+          TARGET_USERNAME: ${{ secrets.TARGET_USERNAME }}
+          TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
         run: | # 토큰을 조합해서 저렇게 URL을 만들면 비번없이 push가 됩니다.
-          git remote add gitlab https://${gitlab_username}:${gitlab_token}@${gitlab_url#https://};
+          git remote add gitlab https://${TARGET_USERNAME}:${TARGET_TOKEN}@${TARGET_URL#https://};
       - name: Force push everthing
         run: | # 모든 브랜치와 태그에 대하여 push합니다. gitlab에서 보호설정이 걸려있으면 Fail할 수 있습니다.
           git push -f --all gitlab;
