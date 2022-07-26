@@ -1,5 +1,6 @@
 package somaMVP.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import somaMVP.response.ImageResponse;
 import somaMVP.service.FileService;
 import java.io.IOException;
 
+@Tag(name = "upload", description = "파일 업로드 API")
+@RequestMapping("/api/posts")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
