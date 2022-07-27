@@ -6,7 +6,9 @@ server:
 #spring.thymeleaf.prefix=classpath:/templates/
 #spring.thymeleaf.suffix=.html
 spring:
-  servlet:
+ servlet:
    multipart:
     maxFileSize: 10MB
     maxRequestSize: 10MB
+ profiles:
+  include: API-KEY

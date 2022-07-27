@@ -12,7 +12,6 @@ import somaMVP.service.FileService;
 import java.io.IOException;
 
 @Tag(name = "upload", description = "파일 업로드 API")
-@RequestMapping("/api/posts")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
