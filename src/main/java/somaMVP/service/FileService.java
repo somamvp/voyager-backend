@@ -14,26 +14,29 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.Base64;
 import java.util.List;
-
-import static somaMVP.service.ClearService.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FileService {
+    public static final int FILE_ROOF_COUNT = 1; // % 몇 회 요청이 들어왔을 때 업로드 메소드를 수행 할지 셋팅.
+    //    protected static List<byte[]> multipartFiles = new ArrayList<>(FILE_ROOF_COUNT);
+    //    protected static List<String> fileNames = new ArrayList<>(FILE_ROOF_COUNT);
+    protected static ConcurrentLinkedQueue<byte[]> multipartFiles = new ConcurrentLinkedQueue<>();
+    protected static ConcurrentLinkedQueue<String> fileNames = new ConcurrentLinkedQueue<>();
     @Value("${attachFileLocation}")
     public String attachFileLocation;
     @Value("${HOME}")
     public String uploadDir;
     private int imageNumber = 0;
-    private final ClearService clearService;
     private final ImageResponse imageResponse;
     Path serverPath = Paths.get(
             File.separator + "home" + File.separator + "juwon" +
                     File.separator + // 다른 OS 환경 구분자 호환 용도
                     StringUtils.cleanPath("test.jpg"));
     @RunningTime
-    public void httpUpload(List<byte[]> multipartFile, List<String> originName) {
+    public void httpUpload(ConcurrentLinkedQueue<byte[]> multipartFile, ConcurrentLinkedQueue<String> originName) {
         for(byte[] imageBytes : multipartFile) {
             //String originNames = originName.get((imageNumber++)%loofCount); // Multipart 파일 이름 읽어올 때 사용
             defaultUpload(imageBytes);
@@ -46,7 +49,8 @@ public class FileService {
         fileNames.add(file.getOriginalFilename());
         if((imageResponse.sequenceNo) % FILE_ROOF_COUNT == 0){
             httpUpload(multipartFiles, fileNames); // 파일 업로드 수행
-            clearService.clearList(multipartFiles, fileNames); // 업로드 후 리스트 초기화
+            multipartFiles.clear();
+            fileNames.clear();
         }
     }
     @RunningTime

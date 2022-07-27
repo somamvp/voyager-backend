@@ -25,7 +25,7 @@ deploy*
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+application-API-KEY.yml
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
