@@ -12,7 +12,6 @@ import somaMVP.service.FileService;
 import java.io.IOException;
 
 @Tag(name = "upload", description = "파일 업로드 API")
-@RequestMapping("/api/posts")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -20,9 +19,17 @@ public class FileRestController {
     public final FileService fileService;
     public final ImageResponse imageResponse;
     @PostMapping("/upload")
-    public ResponseEntity<ImageResponse> uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
+    public ImageResponse uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
         log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
         fileService.fileProcess(file);
-        return new ResponseEntity<>(imageResponse, HttpStatus.OK);
+        //return new ResponseEntity<>(imageResponse, HttpStatus.OK);
+        //return ResponseEntity.ok(imageResponse);
+        return imageResponse;
+    }
+    @GetMapping("/hello")
+    public Kakao upload(@ModelAttribute Kakao kakao){
+        log.info("kakao : {} ", kakao);
+        log.info(kakao.getRestapi());
+        return kakao;
     }
 }
