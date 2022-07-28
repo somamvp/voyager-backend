@@ -23,5 +23,7 @@ public class FileRestController {
         log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
         fileService.fileProcess(file);
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
+        // HTTP OK만 보낸다면 ResponseEntity 를 쓸 필요가 없다
+        // fileProcess를 따로 큐로 분리하는게 FileIO 에러 처리 측면에서 고려해야 함.
     }
 }
