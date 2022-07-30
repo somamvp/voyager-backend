@@ -26,6 +26,14 @@ public class FileRestController {
         //return ResponseEntity.ok(imageResponse);
         return imageResponse;
     }
+//    @PostMapping("/upload")
+//    public ImageResponse uploadFile(@RequestBody MultipartFile img) throws IOException {
+//        log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
+//        fileService.fileProcess(file);
+//        //return new ResponseEntity<>(imageResponse, HttpStatus.OK);
+//        //return ResponseEntity.ok(imageResponse);
+//        return imageResponse;
+//    }
     @GetMapping("/hello")
     public Kakao upload(@ModelAttribute Kakao kakao){
         log.info("kakao : {} ", kakao);
