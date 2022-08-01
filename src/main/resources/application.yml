@@ -11,4 +11,4 @@ spring:
     maxFileSize: 10MB
     maxRequestSize: 10MB
  profiles:
-  include: API-KEY
+  include: secure
