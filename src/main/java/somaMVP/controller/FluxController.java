@@ -49,7 +49,6 @@ public class FluxController {
                             .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
 
     WebClient client2 = WebClient.builder()
-            .baseUrl(ML_URL)
             .clientConnector(new ReactorClientHttpConnector(httpClient))
             .build();
 }
