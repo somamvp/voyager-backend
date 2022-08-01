@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 import somaMVP.response.ImageResponse;
 import somaMVP.service.FileService;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class FileRestController {
     public final FileService fileService;
     public final ImageResponse imageResponse;
+    public final FluxController fluxController;
     @PostMapping("/upload")
     public ImageResponse uploadFile(@RequestParam("img") MultipartFile file) throws IOException {
         log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
@@ -35,9 +37,11 @@ public class FileRestController {
 //        return imageResponse;
 //    }
     @GetMapping("/hello")
-    public Kakao upload(@ModelAttribute Kakao kakao){
-        log.info("kakao : {} ", kakao);
-        log.info(kakao.getRestapi());
-        return kakao;
+    public Mono<String> upload() {
+        return fluxController.post();
+    }
+    @PostMapping("/hello")
+    public Mono<String> hello(@RequestParam("img") MultipartFile file) throws IOException {
+        return fluxController.mlUpload(file);
     }
 }

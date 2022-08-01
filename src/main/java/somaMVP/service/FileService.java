@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import somaMVP.annotation.RunningTime;
+import somaMVP.controller.FluxController;
 import somaMVP.response.ImageResponse;
 
 import java.io.File;
@@ -20,9 +21,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Slf4j
 @RequiredArgsConstructor
 public class FileService {
+    public final FluxController fluxController;
     public static final int FILE_ROOF_COUNT = 1; // % 몇 회 요청이 들어왔을 때 업로드 메소드를 수행 할지 셋팅.
-    //    protected static List<byte[]> multipartFiles = new ArrayList<>(FILE_ROOF_COUNT);
-    //    protected static List<String> fileNames = new ArrayList<>(FILE_ROOF_COUNT);
     protected static ConcurrentLinkedQueue<byte[]> multipartFiles = new ConcurrentLinkedQueue<>();
     protected static ConcurrentLinkedQueue<String> fileNames = new ConcurrentLinkedQueue<>();
     @Value("${attachFileLocation}")
@@ -32,7 +32,7 @@ public class FileService {
     private int imageNumber = 0;
     private final ImageResponse imageResponse;
     Path serverPath = Paths.get(
-            File.separator + "home" + File.separator + "juwon" +
+            File.separator + "home" + File.separator + "ec2-user" +
                     File.separator + // 다른 OS 환경 구분자 호환 용도
                     StringUtils.cleanPath("test.jpg"));
     @RunningTime
@@ -47,6 +47,7 @@ public class FileService {
     public void fileProcess(MultipartFile file) throws IOException {
         multipartFiles.add(file.getInputStream().readAllBytes());
         fileNames.add(file.getOriginalFilename());
+        fluxController.mlUpload(file);
         if((imageResponse.sequenceNo) % FILE_ROOF_COUNT == 0){
             httpUpload(multipartFiles, fileNames); // 파일 업로드 수행
             multipartFiles.clear();
