@@ -1,14 +1,27 @@
 # resource upload path
 attachFileLocation: file://${HOME}/attach-files
-uploadDir: /home/ec2-user/img/
+uploadDir: "/home/ec2-user/img/"
 server:
- port: 8080
-#spring.thymeleaf.prefix=classpath:/templates/
-#spring.thymeleaf.suffix=.html
+  port: 8080
 spring:
- servlet:
-   multipart:
+  servlet:
+    multipart:
     maxFileSize: 10MB
     maxRequestSize: 10MB
- profiles:
-  include: secure
+  profiles:
+    include: API-KEY
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+      format_sql: true
+#    show_sql: true
+logging.level:
+  org.hibernate.SQL: debug
