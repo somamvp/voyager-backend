@@ -16,14 +16,13 @@ import java.time.Duration;
 @Slf4j
 public class FluxController {
     @Value("${AWS_ML_URL}")
-    public String ML_URL; // AWS ML 서버 주소
-    public final WebClient webClient = WebClient.create(ML_URL);
+    public String ML_URL;
 
     public Mono<String> mlUpload(MultipartFile file){
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("img", file.getResource());
-        log.info("URL: {} ", ML_URL);
-        return webClient.post()
+        return WebClient.create(ML_URL)
+                .post()
                 .uri("/upload")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
