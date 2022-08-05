@@ -26,7 +26,8 @@ public class FileServiceImpl implements FileService {
     protected final ConcurrentHashMap<String, byte[]> fileMaps = new ConcurrentHashMap<>();
     @Value("${attachFileLocation}")
     public String attachFileLocation;
-    public String uploadDir = "/home/ec2-user/image/";
+    @Value("${uploadDir}")
+    public String uploadDir;
     private int imageNumber = 0;
     private final ImageResponse imageResponse;
     @RunningTime

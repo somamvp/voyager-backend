@@ -1,6 +1,6 @@
 # resource upload path
 attachFileLocation: file://${HOME}/attach-files
-uploadDir: /home/ec2-user/img/
+uploadDir: /home/ubuntu/img/
 server:
  port: 8080
 #spring.thymeleaf.prefix=classpath:/templates/
