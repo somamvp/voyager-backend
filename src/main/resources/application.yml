@@ -1,0 +1,14 @@
+# resource upload path
+attachFileLocation: file://${HOME}/attach-files
+uploadDir: /home/ec2-user/img/
+server:
+ port: 8080
+#spring.thymeleaf.prefix=classpath:/templates/
+#spring.thymeleaf.suffix=.html
+spring:
+ servlet:
+   multipart:
+    maxFileSize: 10MB
+    maxRequestSize: 10MB
+ profiles:
+  include: secure
