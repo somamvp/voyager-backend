@@ -1,6 +1,6 @@
 # resource upload path
 attachFileLocation: file://${HOME}/attach-files
-uploadDir: /home/ec2-user/img/
+uploadDir: /Users/juwon/IdeaProjects/teamMVP/img/
 server:
   port: 8080
 spring:

@@ -1,5 +1,6 @@
 package somaMVP.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -14,14 +15,13 @@ import java.time.Duration;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class FluxController {
-    @Value("${AWS_ML_URL}")
-    public String ML_URL;
-
+    private final WebClient webClient;
+    private final MultipartBodyBuilder builder;
     public Mono<String> mlUpload(MultipartFile file){
-        MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("img", file.getResource());
-        return WebClient.create(ML_URL)
+        return webClient
                 .post()
                 .uri("/upload")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
