@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import somaMVP.annotation.RunningTime;
-import somaMVP.controller.FluxController;
 import somaMVP.response.ImageResponse;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Base64;
@@ -21,9 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
-    public final FluxController fluxController;
+    public final FluxInferenceService fluxInferenceService;
     public static final Integer FILE_ROOF_COUNT = 1; // % 몇 회 요청이 들어왔을 때 업로드 메소드를 수행 할지 셋팅.
     protected final ConcurrentHashMap<String, byte[]> fileMaps = new ConcurrentHashMap<>();
+
     @Value("${attachFileLocation}")
     public String attachFileLocation;
     @Value("${uploadDir}")
