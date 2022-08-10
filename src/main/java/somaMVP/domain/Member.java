@@ -1,17 +1,18 @@
 package somaMVP.domain;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Getter @Setter
+@Getter
+@Setter // 추후 삭제
 @ToString
 @Entity
-@JsonNaming(PropertyNamingStrategies.LowerCaseStrategy.class)
+@AllArgsConstructor
+@NoArgsConstructor
+//@JsonNaming(PropertyNamingStrategies.LowerCaseStrategy.class)
 public class Member {
     @Id @GeneratedValue
     private Long id; // 기본 키
@@ -19,7 +20,7 @@ public class Member {
     private String password; // 추후 암호화 필요
     private String userName;
     private String phoneNumber;
-    private Long disabledNumber; // 장애인 등록 번호
+    private String disabledNumber; // 장애인 등록 번호
     private String email;
     private String address;
 }

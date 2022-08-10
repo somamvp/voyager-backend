@@ -11,11 +11,11 @@ spring:
      maxRequestSize: 10MB
   profiles:
     include: secure
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/test
+#    username: sa
+#    password:
+#    driverClassName: org.h2.Driver
 
   jpa:
     hibernate:
@@ -26,3 +26,8 @@ spring:
     show_sql: true
 logging.level:
   org.hibernate.SQL: debug
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true # 운영시 false로 변경

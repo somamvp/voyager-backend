@@ -25,3 +25,8 @@ spring:
     show_sql: true
 logging.level:
   org.hibernate.SQL: debug
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true

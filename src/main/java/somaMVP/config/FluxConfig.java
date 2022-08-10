@@ -15,14 +15,11 @@ public class FluxConfig {
 
     @Bean
     public WebClient webClient() {
-        WebClient webClient = WebClient.create(ML_URL);
-        log.info("webClient : {}", ML_URL);
-        return webClient;
+        log.info("[ML_URL] : {}", ML_URL);
+        return WebClient.create(ML_URL);
     }
     @Bean
     public MultipartBodyBuilder multipartBodyBuilder() {
-        MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        log.info("body builder created");
-        return builder;
+        return new MultipartBodyBuilder();
     }
 }
