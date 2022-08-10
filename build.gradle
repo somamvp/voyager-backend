@@ -28,7 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'com.google.code.gson:gson:2.9.0' // Gson
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3' // Jackson
-	implementation 'maria-db:mariadb-java-client:1.4.0' // MariaDB
+	compileOnly 'maria-db:mariadb-java-client:1.4.0' // MariaDB
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0' // P6Spy
 
 	compileOnly 'org.projectlombok:lombok'
