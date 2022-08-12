@@ -28,9 +28,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'com.google.code.gson:gson:2.9.0' // Gson
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3' // Jackson
-	compileOnly 'maria-db:mariadb-java-client:1.4.0' // MariaDB
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0' // P6Spy
 
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0' // P6Spy
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.2' // Logstash
+
+	compileOnly 'maria-db:mariadb-java-client:1.4.0' // MariaDB
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly 'com.h2database:h2' // H2 DB

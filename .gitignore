@@ -36,3 +36,4 @@ application-API-KEY.yml
 ### VS Code ###
 .vscode/
 /deploy_server.sh
+*secure*
