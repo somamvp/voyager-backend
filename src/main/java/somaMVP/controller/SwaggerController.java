@@ -17,26 +17,25 @@ import somaMVP.repository.MemberRepository;
 import somaMVP.response.ImageResponse;
 import somaMVP.response.UuidResponse;
 
-@Tag(name = "posts", description = "게시물 API")
-@RequestMapping("/api/posts")
+@Tag(name = "swagger", description = "게시물 API")
+@RequestMapping("/api/swaggers")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class SwaggerController {
     public final MemberRepository memberRepository;
-    @Operation(summary = "test hello", description = "hello api example")
-    @ApiResponse(responseCode = "200", description = "OK !!")
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST !!")
-    @ApiResponse(responseCode = "404", description = "NOT FOUND !!")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !!")
+//    @Operation(summary = "test hello", description = "hello api example")
+//    @ApiResponse(responseCode = "200", description = "OK !!")
+//    @ApiResponse(responseCode = "400", description = "BAD REQUEST !!")
+//    @ApiResponse(responseCode = "404", description = "NOT FOUND !!")
     //
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello(@Parameter(description = "이름", required = true, example = "Park") @RequestParam String name) {
+    @PostMapping("/http")
+    public ResponseEntity<String> httpTest(@Parameter(description = "이름", required = true, example = "Park") @RequestParam String name) {
         return ResponseEntity.ok("hello " + name);
     }
-    @PostMapping("/test")
-    public UuidResponse test(@RequestBody UuidResponse uuidResponse) {
-        log.info("uuid: {}, name: {} ", uuidResponse.getUuid(), uuidResponse.getName());
+    @PostMapping("/uuid")
+    public UuidResponse fluxTest(@RequestBody UuidResponse uuidResponse) {
+        log.info("UuidResponse: {}", uuidResponse.toString());
         return uuidResponse;
     }
     @PostMapping("/sign")

@@ -18,14 +18,12 @@ public class MemberDto {
     private String userId; // 유저 진짜 아이디
     @JsonIgnore
     @NotBlank
-    @Size(min = 4, max = 20)
     private String password; // 추후 암호화 필요
     @NotBlank
-    @Size(min = 3, max = 10)
+    @Size(max = 64)
     private String userName;
     private String phoneNumber;
     @NotBlank
-    @Size(min = 4, max = 20)
     private String disabledNumber; // 장애인 등록 번호
     private String email;
     private String address;

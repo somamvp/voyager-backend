@@ -1,37 +1,20 @@
 # resource upload path
 attachFileLocation: file://${HOME}/attach-files
-#uploadDir: /home/ubuntu/img/
-uploadDir: /Users/juwon/IdeaProjects/teamMVP/img/
 server:
   port: 8080
+  tomcat:
+    uri-encoding: UTF-8
 spring:
+  profiles:
+    active: test # 활성화 시킬 프로필
+    #include: secure, 추후에 group 에 auth 추가 예정
+    group:
+      prod: prod
+      dev: dev
+      test: test
+
   servlet:
     multipart:
-     maxFileSize: 10MB
-     maxRequestSize: 10MB
-  profiles:
-    include: secure
-    active: local
-  #  datasource:
-#    url: jdbc:h2:tcp://localhost/~/test
-#    username: sa
-#    password:
-#    driverClassName: org.h2.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-      format_sql: true
-    show_sql: true
-logging.level:
-  org.hibernate.SQL: debug
-
-logging:
-  config: classpath:logback-spring-${spring.profiles.active}.xml
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true # 운영시 false로 변경
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
+      #location: /data/upload_tmp
