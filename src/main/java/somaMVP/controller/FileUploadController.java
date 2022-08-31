@@ -22,7 +22,7 @@ import static java.util.Objects.*;
 @RequiredArgsConstructor
 @Slf4j
 //@RequestMapping("/api/files")
-public class FileRestController {
+public class FileUploadController {
     public final FileServiceImpl fileService;
     public final ImageResponse imageResponse;
     public final FileInferenceService fileInferenceService;
@@ -34,7 +34,8 @@ public class FileRestController {
     }
 
     @PostMapping("/ml/upload")
-    public Mono<String> inference(@RequestParam("img") MultipartFile file, @RequestParam("userid") String userId) {
+    public Mono<String> inference(@RequestParam("img") MultipartFile file,
+                                  @RequestParam String userId) {
         Mono<String> inferenceResult = fileInferenceService.mlUpload(file, userId);
         log.info("inference result: {}", inferenceResult);
         return requireNonNullElseGet(inferenceResult, () -> Mono.just("null error"));
@@ -42,7 +43,6 @@ public class FileRestController {
 
     @GetMapping("/responseTest")
     public String test() {
-        String test = fileInferenceService.test();
-        return test;
+        return fileInferenceService.test();
     }
 }

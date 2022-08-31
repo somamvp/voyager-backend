@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import somaMVP.domain.Member;
 import somaMVP.domain.MemberDto;
-import somaMVP.repository.MemberRepository;
+import somaMVP.domain.MemberRepository;
 
 @Tag(name = "member", description = "유저 정보 API")
 @RestController

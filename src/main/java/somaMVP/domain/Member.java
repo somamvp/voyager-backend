@@ -7,13 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Getter
-@Setter // 추후 삭제
-@ToString
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 //@JsonNaming(PropertyNamingStrategies.LowerCaseStrategy.class)
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id @GeneratedValue
     private Long id; // 기본 키
     private String userId; // 유저 진짜 아이디
@@ -23,4 +21,14 @@ public class Member {
     private String disabledNumber; // 장애인 등록 번호
     private String email;
     private String address;
+    @Builder
+    public Member(String userId, String password, String userName, String phoneNumber, String disabledNumber, String email, String address) {
+        this.userId = userId;
+        this.password = password;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.disabledNumber = disabledNumber;
+        this.email = email;
+        this.address = address;
+    }
 }

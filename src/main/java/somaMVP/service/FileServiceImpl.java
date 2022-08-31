@@ -70,7 +70,7 @@ public class FileServiceImpl implements FileService {
         try {
             Files.write(serverPath, imageBytes);
         } catch (IOException e) {
-            log.info("IOException = {}", e);
+            log.info("IOException = {}", e.toString());
         }
     }
 }

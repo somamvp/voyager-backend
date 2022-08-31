@@ -6,7 +6,7 @@ server:
     uri-encoding: UTF-8
 spring:
   profiles:
-    active: test # 활성화 시킬 프로필
+    active: dev # 활성화 시킬 프로필
     #include: secure, 추후에 group 에 auth 추가 예정
     group:
       prod: prod
