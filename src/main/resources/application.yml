@@ -1,14 +1,21 @@
 # resource upload path
 attachFileLocation: file://${HOME}/attach-files
-uploadDir: /home/ec2-user/img/
-server:
- port: 8080
-#spring.thymeleaf.prefix=classpath:/templates/
-#spring.thymeleaf.suffix=.html
+
+spring.redis:
+  host: localhost
+  port: 6379
+
 spring:
- servlet:
-   multipart:
-    maxFileSize: 10MB
-    maxRequestSize: 10MB
- profiles:
-  include: secure
+  profiles:
+    active: dev # 활성화 시킬 프로필
+    #include: secure, 추후에 group 에 auth 추가 예정
+    group:
+      prod: prod, prod2
+      dev: dev, dev2
+      test: test
+
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
+      #location: /data/upload_tmp

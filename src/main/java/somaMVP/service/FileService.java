@@ -10,6 +10,5 @@ public interface FileService {
     void fileProcess(MultipartFile file) throws IOException;
     byte[]  base64ToImgDecoder(String data);
     void grpcUpload(byte[] imageBytes, Path serverPath);
-
     void defaultUpload(byte[] imageBytes, Path serverPath);
 }

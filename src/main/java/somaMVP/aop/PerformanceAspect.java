@@ -26,7 +26,7 @@ public class PerformanceAspect {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         // 실행
-        Object returnningObj = joinPoint.proceed();
+        joinPoint.proceed();
         // 실행 종료 시간
         stopWatch.stop();
         // 메소드 이름 가져오기
