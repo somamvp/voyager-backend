@@ -21,7 +21,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//@RequestMapping("/api/files")
+@RequestMapping("/api/v1/files")
 public class FileUploadController {
     public final FileServiceImpl fileService;
     public final ImageResponse imageResponse;

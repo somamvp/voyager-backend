@@ -22,17 +22,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9' // Swagger
-	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.2' // WebFlux
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11' // Swagger
+	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.3' // WebFlux
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'com.google.code.gson:gson:2.9.0' // Gson
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3' // Jackson
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.6' // MariaDB
+	implementation 'mysql:mysql-connector-java' // MySQL
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0' // P6Spy
 	implementation 'net.logstash.logback:logstash-logback-encoder:7.2' // Logstash
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly 'com.h2database:h2' // H2 DB
+
 
 
 	annotationProcessor 'org.projectlombok:lombok'

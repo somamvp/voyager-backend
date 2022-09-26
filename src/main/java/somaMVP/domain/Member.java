@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
@@ -12,7 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 //@JsonNaming(PropertyNamingStrategies.LowerCaseStrategy.class)
 public class Member extends BaseTimeEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 기본 키
     private String userId; // 유저 진짜 아이디
     private String password; // 추후 암호화 필요
