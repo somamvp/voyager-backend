@@ -1,6 +1,0 @@
-[2022-08-15 01:04:09:80264082] [32m[Thread-26][0;39m [34mINFO [0;39m [1;37m[org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.destroy:[33m651[0;39m][0;39m - Closing JPA EntityManagerFactory for persistence unit 'default'
-[2022-08-15 01:04:10:80264365] [32m[Thread-26][0;39m [34mINFO [0;39m [1;37m[com.p6spy.engine.spy.appender.Slf4JLogger.logSQL:[33m60[0;39m][0;39m - 22.08.15 01:04:10 | OperationTime : 213ms|
-HeFormatSql(P6Spy sql,Hibernate format):
-    SHUTDOWN
-[2022-08-15 01:04:10:80264368] [32m[Thread-26][0;39m [34mINFO [0;39m [1;37m[com.zaxxer.hikari.HikariDataSource.close:[33m350[0;39m][0;39m - HikariPool-7 - Shutdown initiated...
-[2022-08-15 01:04:10:80264381] [32m[Thread-26][0;39m [34mINFO [0;39m [1;37m[com.zaxxer.hikari.HikariDataSource.close:[33m352[0;39m][0;39m - HikariPool-7 - Shutdown completed.
