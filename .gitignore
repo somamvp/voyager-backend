@@ -37,3 +37,6 @@ application-API-KEY.yml
 .vscode/
 /deploy_server.sh
 *secure*
+application-*.yml
+*.sql
+*.log
