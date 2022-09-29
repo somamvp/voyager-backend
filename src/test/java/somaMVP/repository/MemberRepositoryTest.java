@@ -3,8 +3,8 @@ package somaMVP.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import somaMVP.domain.Member;
-import somaMVP.domain.MemberRepository;
+import somaMVP.domain.member.Member;
+import somaMVP.domain.member.MemberRepository;
 
 import javax.transaction.Transactional;
 

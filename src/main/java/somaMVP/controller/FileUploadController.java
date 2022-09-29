@@ -3,17 +3,12 @@ package somaMVP.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
-import somaMVP.domain.Member;
 import somaMVP.response.ImageResponse;
 import somaMVP.service.FileServiceImpl;
 import somaMVP.service.FileInferenceService;
-
-import java.io.File;
-import java.io.IOException;
 
 import static java.util.Objects.*;
 

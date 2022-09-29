@@ -3,14 +3,10 @@ package somaMVP.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import somaMVP.domain.Gis;
-import somaMVP.domain.GisRepository;
-import somaMVP.domain.Member;
-import somaMVP.domain.MemberRepository;
+import somaMVP.domain.gis.Gis;
+import somaMVP.domain.gis.GisRepository;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;

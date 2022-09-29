@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import somaMVP.domain.Member;
-import somaMVP.domain.MemberDto;
-import somaMVP.domain.MemberRepository;
+import somaMVP.domain.member.Member;
+import somaMVP.domain.member.MemberDto;
+import somaMVP.domain.member.MemberRepository;
 import somaMVP.response.UuidResponse;
 
 @Tag(name = "swagger", description = "게시물 API")
