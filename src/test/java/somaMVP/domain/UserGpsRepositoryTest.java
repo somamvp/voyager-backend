@@ -28,8 +28,7 @@ class UserGpsRepositoryTest {
 
     @Test
     void test() {
-        UserGps userGps = new UserGps();
-
+        UserGps userGps = new UserGps("test");
         // 저장
         repo.save(userGps);
         // `keyspace:id` 값을 가져옴
@@ -51,7 +50,7 @@ class UserGpsRepositoryTest {
     void testHash() {
         String key = "test";
         // given
-        UserGps userGps = new UserGps();
+        UserGps userGps = new UserGps("testId");
         HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
 
         // when
@@ -78,7 +77,7 @@ class UserGpsRepositoryTest {
         testMap.put("gpsX", "0.0");
         testMap.put("gpsY", "0.0");
         // given
-        UserGps userGps = new UserGps();
+        UserGps userGps = new UserGps("test");
         StreamOperations<String, Object, Object> streamOperations = redisTemplate.opsForStream();
         // when
         streamOperations.add(key, testMap);

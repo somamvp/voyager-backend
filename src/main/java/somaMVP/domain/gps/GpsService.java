@@ -2,13 +2,16 @@ package somaMVP.domain.gps;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Range;
 import org.springframework.data.redis.connection.stream.MapRecord;
+import org.springframework.data.redis.connection.stream.Record;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StreamOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -18,9 +21,8 @@ public class GpsService {
     @Autowired
     private UserGpsRepository userGpsRepository;
 
-    public String createGps() {
-        UserGps userGps = new UserGps();
-        log.info("userGps : {}", userGps.getId());
+    public String createGps(String gpsId) {
+        UserGps userGps = new UserGps(gpsId);
         userGpsRepository.save(userGps);
         return userGpsRepository.save(userGps).getId();
     }
@@ -30,6 +32,13 @@ public class GpsService {
         log.info("userGpsDto.toMap(id) = " + userGpsDto.toMap(id, userGpsDto.getGpsX().toString(), userGpsDto.getGpsY().toString()));
         streamOperations.add(id, userGpsDto.toMap(id, userGpsDto.getGpsX().toString(), userGpsDto.getGpsY().toString()));
         streamOperations.trim(id, 6);
+        return id;
+    }
+
+    public String deleteGps(String id) {
+        redisTemplate.expire(id, 100,  TimeUnit.MILLISECONDS);
+        redisTemplate.expire("user:"+id, 100,  TimeUnit.MILLISECONDS);
+        redisTemplate.opsForSet().remove("user", id);
         return id;
     }
 

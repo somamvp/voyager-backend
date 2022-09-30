@@ -11,8 +11,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GpsCrudService {
     private final UserGpsRepository userGpsRepository;
-    public String createGps() {
-        UserGps userGps = new UserGps();
+    public String createGps(String id) {
+        UserGps userGps = new UserGps(id);
         userGpsRepository.save(userGps);
         return userGps.getId();
     }
