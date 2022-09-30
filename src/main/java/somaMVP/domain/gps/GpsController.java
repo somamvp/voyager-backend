@@ -11,16 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-@Tag(name = "file", description = "파일 업로드 API")
+@Tag(name = "gps", description = "유저 GPS API")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/gps")
 public class GpsController {
     public final GpsService gpsService;
+
     @GetMapping("/create")
     public String createGps(HttpServletResponse response) {
-        String gpsId = gpsService.createGps();
+        String gpsId = gpsService.createGps(); // null이면 안됨.
         Cookie cookie = new Cookie("gpsId", gpsId);
         response.addCookie(cookie);
         return gpsId;
@@ -29,9 +30,10 @@ public class GpsController {
     @PostMapping("/update") // TODO redis pub/sub 기능으로 리팩토링
     public String gpsReport(@CookieValue(name = "gpsId", required = false) String gpsId, @RequestBody @Valid UserGpsDto userGpsDto) {
         if(gpsId == null) {
+            log.info("gpsId is null");
             return "redirect:/api/v1/gps/create";
         }
-        log.info("POST /report 요청");
+        log.info("POST /update 요청");
         log.info("session id : " + gpsId);
         return gpsService.updateGps(gpsId, userGpsDto);
     }
@@ -42,5 +44,10 @@ public class GpsController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "redirect:/";
+    }
+
+    @GetMapping("/direction")
+    public String getDirection(@CookieValue(name = "gpsId", required = false) String gpsId) {
+        return gpsService.getDirection(gpsId);
     }
 }

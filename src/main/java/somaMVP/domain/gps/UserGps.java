@@ -15,7 +15,7 @@ public class UserGps {
     private final Double gpsY;
     private LocalDateTime createdAt;
 
-    public UserGps(String id, Double gpsX, Double gpsY) {
+    public UserGps(Double gpsX, Double gpsY) {
         this.gpsX = gpsX;
         this.gpsY = gpsY;
         this.createdAt = LocalDateTime.now();

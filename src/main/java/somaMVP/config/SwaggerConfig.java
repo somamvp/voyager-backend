@@ -12,8 +12,8 @@ public class SwaggerConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("v1-명세서")
-                .packagesToScan("somaMVP.controller")
-                //.pathsToMatch("/api/**")
+                .packagesToScan("somaMVP")
+                .pathsToMatch("/api/**")
                 .build();
     }
     @Bean
