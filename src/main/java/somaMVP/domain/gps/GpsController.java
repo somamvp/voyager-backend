@@ -33,9 +33,9 @@ public class GpsController {
     @DeleteMapping("/expire")
     public String expire(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String id = session.getId();
+        session.getId();
         session.invalidate();
-        return gpsService.deleteGps(id);
+        return gpsService.deleteGps(session.getId());
     }
 
 

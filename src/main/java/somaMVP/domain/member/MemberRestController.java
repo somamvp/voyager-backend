@@ -1,4 +1,4 @@
-package somaMVP.controller;
+package somaMVP.domain.member;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import somaMVP.domain.member.Member;
-import somaMVP.domain.member.MemberDto;
-import somaMVP.domain.member.MemberRepository;
 
 @Tag(name = "member", description = "유저 정보 API")
 @RestController
