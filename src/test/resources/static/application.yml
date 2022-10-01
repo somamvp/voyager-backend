@@ -1,9 +1,13 @@
 # resource upload path
 attachFileLocation: file://${HOME}/attach-files
 
+spring.redis:
+  host: localhost
+  port: 6379
+
 spring:
   profiles:
-    active: docker # 활성화 시킬 프로필
+    active: test # 활성화 시킬 프로필
     #include: secure, 추후에 group 에 auth 추가 예정
     group:
       prod: prod, prod2
