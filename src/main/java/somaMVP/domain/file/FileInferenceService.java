@@ -1,4 +1,4 @@
-package somaMVP.service;
+package somaMVP.domain.file;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,9 @@ import java.time.Duration;
 public class FileInferenceService {
     @Value("${AWS_ML_URL}")
     public String ML_URL;
-    public Mono<String> mlUpload(MultipartFile files, String userId) {
+    public Mono<String> mlUpload(MultipartFile files) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생함
-        builder.part("img", files.getResource());
-        builder.part("userid", userId);
+        builder.part("source", files.getResource());
         return WebClient.create(ML_URL)
                 .post()
                 .uri("/upload")

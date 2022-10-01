@@ -1,6 +1,7 @@
-package somaMVP.domain;
+package somaMVP.domain.member;
 
 import lombok.*;
+import somaMVP.domain.BaseTimeEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

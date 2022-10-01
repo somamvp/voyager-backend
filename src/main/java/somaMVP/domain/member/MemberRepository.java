@@ -1,9 +1,8 @@
-package somaMVP.domain;
+package somaMVP.domain.member;
 
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import somaMVP.domain.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

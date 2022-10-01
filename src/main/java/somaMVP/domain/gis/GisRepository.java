@@ -1,4 +1,4 @@
-package somaMVP.domain;
+package somaMVP.domain.gis;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
