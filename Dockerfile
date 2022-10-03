@@ -37,7 +37,7 @@ COPY --from=builder ${BUILD_TARGET}/BOOT-INF/classes ${DEPLOY_PATH}/BOOT-INF/cla
 WORKDIR ${DEPLOY_PATH}
 
 EXPOSE 8080/tcp
-ENTRYPOINT ["java","org.springframework.boot.loader.JarLauncher"]
+#ENTRYPOINT ["java","org.springframework.boot.loader.JarLauncher"]
 #ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "-jar", "/app.jar"]
 ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "org.springframework.boot.loader.JarLauncher"]
 

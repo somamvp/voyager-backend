@@ -13,7 +13,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql
     networks:
-      - backend-network
+      - elk
 
   redis:
     image: redis:alpine
@@ -26,7 +26,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - backend-network
+      - elk
 
   spring:
     container_name: voyager-backend-dev
@@ -41,7 +41,7 @@ services:
       - db
       - redis
     networks:
-      - backend-network
+      - elk
 
 networks:
-  backend-network:
+  elk:
