@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import somaMVP.domain.gis.GisDtos;
+import somaMVP.domain.session.SessionConst;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -30,6 +33,15 @@ public class GpsController {
         return gpsService.updateGps(gpsId, userGpsDto);
     }
 
+
+    @PostMapping("/report")
+    public GisDtos gpsReport(@RequestBody @Valid UserGpsDto userGpsDto) {
+        Double distance = userGpsDto.getDistance();
+        if(distance == null) {
+            distance = 0.3;
+        }
+        return gpsService.nearZebra(userGpsDto.getGpsY(), userGpsDto.getGpsX(), distance);
+    }
     @DeleteMapping("/expire")
     public String expire(HttpServletRequest request) {
         HttpSession session = request.getSession();

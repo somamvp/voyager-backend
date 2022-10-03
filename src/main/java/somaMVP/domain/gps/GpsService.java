@@ -1,30 +1,68 @@
 package somaMVP.domain.gps;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Range;
 import org.springframework.data.redis.connection.stream.MapRecord;
-import org.springframework.data.redis.connection.stream.Record;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StreamOperations;
 import org.springframework.stereotype.Service;
+import somaMVP.domain.gis.Gis;
+import somaMVP.domain.gis.GisDto;
+import somaMVP.domain.gis.GisDtos;
+import somaMVP.domain.utils.CardinalDirection;
+import somaMVP.domain.utils.GeometryUtils;
+import somaMVP.domain.utils.Location;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class GpsService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private UserGpsRepository userGpsRepository;
+    private final EntityManager entityManager;
 
     public String createGps(String gpsId) {
         UserGps userGps = new UserGps(gpsId);
         userGpsRepository.save(userGps);
         return userGpsRepository.save(userGps).getId();
+    }
+
+    public GisDtos nearZebra(Double gpsY, Double gpsX, Double distance){
+        // 북동쪽 좌표 구하기
+        Location northEast = GeometryUtils.calculateByDirection(gpsX, gpsY, distance, CardinalDirection.NORTHEAST
+                .getBearing());
+        Location southWest = GeometryUtils.calculateByDirection(gpsX, gpsY, distance, CardinalDirection.SOUTHWEST
+                .getBearing());
+        double x1 = northEast.getLongitude();
+        double y1 = northEast.getLatitude();
+        double x2 = southWest.getLongitude();
+        double y2 = southWest.getLatitude();
+
+        // native query 활용
+        Query query = entityManager.createNativeQuery("" +
+                        "SELECT r.id, r.zebra_id, r.geometry, r.gpsx, r.gpsy, r.address, r.light_exist, r.acoustic_exist, r.created_date \n" +
+                        "FROM `local-db`.GIS AS r \n" +
+                        "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2) + ", r.geometry)"
+                , Gis.class);
+
+        List<Gis> results = query.getResultList();
+        List<GisDto> data = results.stream()
+                .map(GisDto::of)
+                .collect(Collectors.toList());
+        return GisDtos.builder()
+                .dataCount(data.size())
+                .data(data)
+                .build();
     }
 
     public String updateGps(String id, UserGpsDto userGpsDto) {

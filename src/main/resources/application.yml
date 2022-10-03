@@ -9,7 +9,7 @@ spring:
       prod: prod, prod2
       dev: dev, dev2
       test: test
-      docker: docker
+      docker: docker, docker-prod
 
   servlet:
     multipart:
