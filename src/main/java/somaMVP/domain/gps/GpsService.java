@@ -39,9 +39,9 @@ public class GpsService {
 
     public GisDtos nearZebra(Double gpsY, Double gpsX, Double distance){
         // 북동쪽 좌표 구하기
-        Location northEast = GeometryUtils.calculateByDirection(gpsX, gpsY, distance, CardinalDirection.NORTHEAST
+        Location northEast = GeometryUtils.calculateByDirection(gpsY, gpsX, distance, CardinalDirection.NORTHEAST
                 .getBearing());
-        Location southWest = GeometryUtils.calculateByDirection(gpsX, gpsY, distance, CardinalDirection.SOUTHWEST
+        Location southWest = GeometryUtils.calculateByDirection(gpsY, gpsX, distance, CardinalDirection.SOUTHWEST
                 .getBearing());
         double x1 = northEast.getLongitude();
         double y1 = northEast.getLatitude();

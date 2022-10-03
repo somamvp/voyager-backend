@@ -34,9 +34,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - "PROFILE=docker"
+      - "PROFILE=docker-prod"
     volumes:
-      - ./log:/log
+      - ./log:/home/spring-docker/deploy/log
     depends_on:
       - db
       - redis
