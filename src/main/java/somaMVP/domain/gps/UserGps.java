@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 public class UserGps {
 
     private String id;
-    private Double gpsX;
     private Double gpsY;
+    private Double gpsX;
     private final LocalDateTime createdAt;
 
-    public UserGps(Double gpsX, Double gpsY) {
+    public UserGps(Double gpsY, Double gpsX) {
         this.gpsX = gpsX;
         this.gpsY = gpsY;
         this.createdAt = LocalDateTime.now();

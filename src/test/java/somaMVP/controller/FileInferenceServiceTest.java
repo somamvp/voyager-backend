@@ -19,6 +19,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
+//@AutoConfigureWebTestClient(timeout = "30000")
 @DisplayName("FileUploadControllerTest")
 class FileInferenceServiceTest {
     //TODO: 테스트 오류 수정 :80 쪽으로 요청이 가는데, 8080으로 요청이 가야함
