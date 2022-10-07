@@ -5,6 +5,8 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.ForwardedHeaderFilter;
+
 @Configuration
 public class SwaggerConfig {
 
@@ -16,11 +18,16 @@ public class SwaggerConfig {
                 .pathsToMatch("/api/**")
                 .build();
     }
+
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("VoyagerBE API")
                         .description("소마 프로젝트 API 명세서입니다.")
                         .version("v0.0.1"));
+    }
+    @Bean
+    ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
     }
 }

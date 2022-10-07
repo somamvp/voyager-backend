@@ -51,7 +51,7 @@ public class GpsService {
         // native query 활용
         Query query = entityManager.createNativeQuery("" +
                         "SELECT r.id, r.zebra_id, r.geometry, r.gpsx, r.gpsy, r.address, r.light_exist, r.acoustic_exist, r.created_date \n" +
-                        "FROM `local-db`.GIS AS r \n" +
+                        "FROM `local-db`.gis AS r \n" +
                         "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2) + ", r.geometry)"
                 , Gis.class);
 
