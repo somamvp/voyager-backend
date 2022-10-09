@@ -2,6 +2,7 @@ package somaMVP.domain.gps;
 
 import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
+
 import java.time.LocalDateTime;
 
 @Getter

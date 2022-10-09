@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Slf4j
 @RequestMapping("/api/v1/gps")
 public class GpsController {
-    public final GpsService gpsService;
+    private final GpsService gpsService;
     @GetMapping("/create")
     public String createGps(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -30,8 +30,8 @@ public class GpsController {
     // SessionAttribute를 사용하면 세션에 저장된 값을 파라미터로 받을 수 있음. 대신 새로 생성하지는 않음.
     @PostMapping("/update") // TODO redis pub/sub 기능으로 리팩토링
     public String updateGps(@SessionAttribute(name = SessionConst.GPS_ID, required = false) String gpsId,
-                            @RequestBody @Valid UserGpsDto userGpsDto) {
-        return gpsService.updateGps(gpsId, userGpsDto);
+                            @RequestBody @Valid UserUpdateGpsDto updateGpsDto) {
+        return gpsService.updateGps(gpsId, updateGpsDto);
     }
 
 
