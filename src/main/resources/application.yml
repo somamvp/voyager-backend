@@ -33,3 +33,11 @@ spring:
 #       rename-on-rotate: true                # rotation 시, 새로운 이름 지정 여부 (rotate 될 때의 날짜명이 로그 파일이름에 찍힘)
 server:
   forward-headers-strategy: framework
+# 문서 접속 URL 변경 (접속시 /swagger-ui/index.html 로 redirect됨)
+springdoc.swagger-ui.path: /api-document.html
+
+# 캐시 비활성화 (Swagger 구성 요소중 캐시로 처리되는 부분이 있음, 로컬 환경에서만 사용하는 것이 좋을듯)
+springdoc.cache.disabled: true
+
+# 모든 @ControllerAdvice 응답이 모든 api의 응답으로 추가됨 (모든 응답에 추가되므로, 해당 response가 일어나지 않는 api에도 추가가 됨. false로 설정)
+springdoc.override-with-generic-response: false

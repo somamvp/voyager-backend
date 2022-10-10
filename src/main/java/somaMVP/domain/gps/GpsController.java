@@ -42,7 +42,7 @@ public class GpsController {
 //            distance = 0.3;
         }
         distance = 0.015;
-        log.debug("GPSX: {}, GPSY: {}", userGpsDto.getGpsX(), userGpsDto.getGpsY());
+        log.info("GPSX: {}, GPSY: {}", userGpsDto.getGpsX(), userGpsDto.getGpsY());
         return gpsService.nearZebra(userGpsDto.getGpsY(), userGpsDto.getGpsX(), distance);
     }
     @DeleteMapping("/expire")
