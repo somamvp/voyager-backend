@@ -30,7 +30,7 @@ services:
 
   spring:
     container_name: voyager-backend-dev
-    build: .
+    build: juwon8891/voyager-backend:0.1
     ports:
       - "8080:8080"
     environment:
