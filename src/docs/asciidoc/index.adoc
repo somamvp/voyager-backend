@@ -1,0 +1,93 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+// static/docs/index.html 기준으로 경로 탐색.
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+// :sectlinks:
+
+= API Docs For [MVP]voyager Backend API
+
+== API 공통 사항
+
+이 API는 https://github.com/omniti-labs/jsend[JSend] Format을 따르는 API로, 아래와 같은 공통된 응답을 줍니다.
+
+추가 사항으로, 권한 인증이 필요한 API는 클라이언트에서 가지고 있는 JWT 토큰을 요청시 Authorization 헤더에 Bearer token과 같은 형태로 함께 전송해야합니다.
+
+|===
+|Type | Description	| Required Keys
+
+|`+success+`
+|요청이 성공하였으며, 일반적으로 데이터를 응답합니다.
+| status, data
+
+|`+fail+`
+| 클라이언트의 요청에서 문제가 있으며, 그에 따른 문제점을 응답합니다.
+| status, data
+
+|`+error+`
+| 요청을 처리하는 도중 서버에서 문제가 발생하였으며, 그에 따른 에러 메시지를 응답합니다.
+| status, message
+|===
+
+=== Example
+
+==== Success
+[source,json,options="nowrap"]
+----
+{
+    "status" : "success",
+    "data" : {
+        "posts" : [
+            { "id" : 1, "title" : "A blog post", "body" : "Some useful content" },
+            { "id" : 2, "title" : "Another blog post", "body" : "More content" },
+        ]
+     }
+}
+----
+
+==== Fail
+[source,json,options="nowrap"]
+----
+{
+    "status" : "fail",
+    "data" : {
+        "title" : "A title is required"
+     }
+}
+----
+
+==== Error
+[source,json,options="nowrap"]
+----
+{
+    "status" : "error",
+    "message" : "Unable to communicate with database"
+}
+----
+
+==== GPS 정보
+
+.description
+[source]
+----
+GPS 정보를 가져옵니다.
+HTTP Method : GET
+End-Point   : /api/v1/gps/create
+----
+.Sample Request
+
+include::{snippets}/gps-controller-test/create-gps/http-request.adoc[]
+.Sample Response
+include::{snippets}/gps-controller-test/create-gps/http-response.adoc[]
+.Request Body
+include::{snippets}/gps-controller-test/create-gps/request-body.adoc[]
+.Response Body
+include::{snippets}/gps-controller-test/create-gps/response-body.adoc[]
+
+
+
+

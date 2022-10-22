@@ -2,7 +2,6 @@ package somaMVP.domain.gps;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.stream.MapRecord;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,11 +24,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class GpsService {
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    private UserGpsRepository userGpsRepository;
-    private final EntityManager entityManager;
+    public final RedisTemplate<String, Object> redisTemplate;
+    public final UserGpsRepository userGpsRepository;
+    public final EntityManager entityManager;
 
     public String createGps(String gpsId) {
         UserGps userGps = new UserGps(gpsId);
@@ -65,10 +62,10 @@ public class GpsService {
                 .build();
     }
 
-    public String updateGps(String id, UserGpsDto userGpsDto) {
+    public String updateGps(String id, UserUpdateGpsDto updateGpsDto) {
         StreamOperations<String, Object, Object> streamOperations = redisTemplate.opsForStream();
-        log.info("userGpsDto.toMap(id) = " + userGpsDto.toMap(id, userGpsDto.getGpsX().toString(), userGpsDto.getGpsY().toString()));
-        streamOperations.add(id, userGpsDto.toMap(id, userGpsDto.getGpsX().toString(), userGpsDto.getGpsY().toString()));
+        log.info("userGpsDto.toMap(id) = " + updateGpsDto.toMap(id));
+        streamOperations.add(id, updateGpsDto.toMap(id));
         streamOperations.trim(id, 6);
         return id;
     }

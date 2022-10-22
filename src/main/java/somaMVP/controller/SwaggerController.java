@@ -12,7 +12,7 @@ import somaMVP.domain.member.MemberRepository;
 import somaMVP.response.UuidResponse;
 
 @Tag(name = "swagger", description = "게시물 API")
-@RequestMapping("/api/swaggers")
+@RequestMapping("/api/v1/swaggers")
 @RestController
 @RequiredArgsConstructor
 @Slf4j

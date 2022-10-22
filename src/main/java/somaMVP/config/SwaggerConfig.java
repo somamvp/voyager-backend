@@ -6,6 +6,13 @@ import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ForwardedHeaderFilter;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerResponse;
+
+import java.net.URI;
+
+import static org.springframework.web.servlet.function.RequestPredicates.GET;
+import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 @Configuration
 public class SwaggerConfig {
@@ -13,7 +20,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("v1-명세서")
+                .group("v1")
                 .packagesToScan("somaMVP")
                 .pathsToMatch("/api/**")
                 .build();
@@ -29,5 +36,10 @@ public class SwaggerConfig {
     @Bean
     ForwardedHeaderFilter forwardedHeaderFilter() {
         return new ForwardedHeaderFilter();
+    }
+    @Bean
+    RouterFunction<ServerResponse> routerFunction() {
+        return route(GET("/swagger"), req ->
+                ServerResponse.temporaryRedirect(URI.create("swagger-ui/index.html")).build());
     }
 }
