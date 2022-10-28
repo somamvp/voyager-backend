@@ -37,4 +37,23 @@ public class FileUploadController {
     public String test() {
         return fileInferenceService.test();
     }
+
+    @GetMapping("/logging")
+    public YoloDto logging(@RequestBody YoloDto yoloDto) {
+        log.info("YoloObject: {}", yoloDto.getYoloObjects());
+        log.info("Position: {}", yoloDto.getPosition());
+        log.info("Guide: {}", yoloDto.getGuide());
+        log.info("Description: {}", yoloDto.getDescription());
+        log.info("Warning: {}", yoloDto.getWarning());
+        return yoloDto;
+    }
+    @GetMapping("/logging2")
+    public Object logging2(YoloDto yoloDto) {
+        log.info("YoloObject: {}", yoloDto.getYoloObjects());
+        log.info("Name: {}", yoloDto.getYoloObjects().get(0).getName());
+        log.info("Confidence: {}", yoloDto.getYoloObjects().get(0).getConfidence());
+        log.info("Xmin: {}", yoloDto.getYoloObjects().get(0).getXmin());
+        log.info("getDepth: {}", yoloDto.getYoloObjects().get(0).getDepth());
+        return yoloDto;
+    }
 }
