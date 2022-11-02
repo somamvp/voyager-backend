@@ -34,7 +34,7 @@ public class FileUploadController {
 
     @PostMapping("/ml/upload")
     public Object inference(HttpServletRequest request,
-                                  @RequestParam("source") MultipartFile file, @RequestParam("is_rot") Boolean isRotate,
+                                  @RequestParam("source") MultipartFile file, @RequestParam(value = "is_rot", required = false) Boolean isRotate,
                                   @RequestParam(value = "gps_info", required = false) String gpsInfo,
                                   @RequestParam(value = "settings") String settings) {
         // 세션 아이디 없으면 생성, 있으면 가져오기
