@@ -34,16 +34,15 @@ public class FileUploadController {
 
     @PostMapping("/ml/upload")
     public Object inference(HttpServletRequest request,
-                                  @RequestParam("source") MultipartFile file, @RequestParam("is_rot") Boolean isRotate,
-                                  @RequestParam(value = "gps_info", required = false) String gpsInfo,
-                                  @RequestParam(value = "settings") String settings) {
+                                  @RequestParam("source") MultipartFile file, @RequestParam(value = "is_rot", required = false) Boolean isRotate,
+                                  @RequestParam(value = "gps_info", required = false) String gpsInfo) {
         // 세션 아이디 없으면 생성, 있으면 가져오기
         HttpSession session = request.getSession();
         String gpsId = gpsService.createGps(session.getId());
         session.setAttribute(SessionConst.GPS_ID, gpsId);
 
         // ML inference 호출
-        Mono<Object> inferenceResult = fileInferenceService.mlUpload(file, isRotate, gpsInfo, settings);
+        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, gpsInfo);
         assert inferenceResult != null;
 
         // ML inference 결과를 배열로 변환

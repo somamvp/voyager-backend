@@ -18,8 +18,9 @@ import java.time.Duration;
 public class FileInferenceService {
     @Value("${AWS_ML_URL}")
     public String ML_URL;
-    public Mono<Object> mlUpload(MultipartFile files, Boolean isRotate, Double gpsX, Double gpsY, Double gpsHeading, Double gpsSpeed) {
+    public Mono<Object> mlUpload(String sessionId, MultipartFile files, Boolean isRotate, Double gpsX, Double gpsY, Double gpsHeading, Double gpsSpeed) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생함
+        builder.part("session_id", sessionId);
         builder.part("source", files.getResource());
         builder.part("is_rot", isRotate);
         if (gpsX != null) {
@@ -56,11 +57,11 @@ public class FileInferenceService {
                 .block();
     }
 
-    public Mono<Object> mlUpload(MultipartFile file, Boolean isRotate, String gpsInfo, String settings) {
+    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, String gpsInfo) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생함
+        builder.part("session_id", gpsId);
         builder.part("source", file.getResource());
         builder.part("is_rot", isRotate);
-        builder.part("settings", settings);
         if (gpsInfo != null) {
             builder.part("gps", gpsInfo);
         }
