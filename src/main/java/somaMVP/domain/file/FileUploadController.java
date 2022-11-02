@@ -1,14 +1,19 @@
 package somaMVP.domain.file;
 
+import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
+import somaMVP.domain.gps.GpsService;
+import somaMVP.domain.session.SessionConst;
 import somaMVP.response.ImageResponse;
 
-import static java.util.Objects.requireNonNullElseGet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Tag(name = "file", description = "파일 업로드 API")
 @RestController
@@ -17,6 +22,7 @@ import static java.util.Objects.requireNonNullElseGet;
 @RequestMapping("/api/v1/files")
 public class FileUploadController {
     public final FileServiceImpl fileService;
+    public final GpsService gpsService;
     public final ImageResponse imageResponse;
     public final FileInferenceService fileInferenceService;
     @PostMapping("/upload")
@@ -27,10 +33,33 @@ public class FileUploadController {
     }
 
     @PostMapping("/ml/upload")
-    public Mono<String> inference(@RequestParam("source") MultipartFile file) {
-        Mono<String> inferenceResult = fileInferenceService.mlUpload(file);
-        log.info("inference result: {}", inferenceResult);
-        return requireNonNullElseGet(inferenceResult, () -> Mono.just("/ml/upload null error"));
+    public Object inference(HttpServletRequest request,
+                                  @RequestParam("source") MultipartFile file, @RequestParam("is_rot") Boolean isRotate,
+                                  @RequestParam(value = "gps_info", required = false) String gpsInfo,
+                                  @RequestParam(value = "settings") String settings) {
+        // 세션 아이디 없으면 생성, 있으면 가져오기
+        HttpSession session = request.getSession();
+        String gpsId = gpsService.createGps(session.getId());
+        session.setAttribute(SessionConst.GPS_ID, gpsId);
+
+        // ML inference 호출
+        Mono<Object> inferenceResult = fileInferenceService.mlUpload(file, isRotate, gpsInfo, settings);
+        assert inferenceResult != null;
+
+        // ML inference 결과를 배열로 변환
+        List<String> block = (List<String>) inferenceResult.block();
+        assert block != null;
+
+        // ML inference 결과 반환
+        Object appResult = block.get(0); // app 리턴 값.
+        Object yoloResult = block.get(1); // yolo 결과
+        Object logRedis = block.get(2); // redis에 저장할 로그
+
+        // ML inference 결과 로깅 및 Redis 저장
+        String yoloResultString = new Gson().toJson(yoloResult);
+        log.info("inferenceResult: {}", yoloResultString);
+        gpsService.uploadYoloResult(gpsId, logRedis.toString());
+        return appResult;
     }
 
     @GetMapping("/test")
@@ -39,21 +68,8 @@ public class FileUploadController {
     }
 
     @GetMapping("/logging")
-    public YoloDto logging(@RequestBody YoloDto yoloDto) {
-        log.info("YoloObject: {}", yoloDto.getYoloObjects());
-        log.info("Position: {}", yoloDto.getPosition());
-        log.info("Guide: {}", yoloDto.getGuide());
-        log.info("Description: {}", yoloDto.getDescription());
-        log.info("Warning: {}", yoloDto.getWarning());
-        return yoloDto;
-    }
-    @GetMapping("/logging2")
-    public Object logging2(YoloDto yoloDto) {
-        log.info("YoloObject: {}", yoloDto.getYoloObjects());
-        log.info("Name: {}", yoloDto.getYoloObjects().get(0).getName());
-        log.info("Confidence: {}", yoloDto.getYoloObjects().get(0).getConfidence());
-        log.info("Xmin: {}", yoloDto.getYoloObjects().get(0).getXmin());
-        log.info("getDepth: {}", yoloDto.getYoloObjects().get(0).getDepth());
-        return yoloDto;
+    public LogExample logging(@RequestBody LogExample logExample) {
+        log.info("inferenceResult: {}", new Gson().toJson(logExample));
+        return logExample;
     }
 }
