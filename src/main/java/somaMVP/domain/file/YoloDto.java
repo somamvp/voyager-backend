@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+
 public class YoloDto {
 
     private String warning;
@@ -17,6 +18,18 @@ public class YoloDto {
     @JsonProperty("rgb_shape")
     private List<Integer> rgbShape;
     private boolean isDepth;
+
+    public YoloDto(String warning, String description, List<String> guide, Position position, List<YoloObjects> yoloObjects, List<Integer> rgbShape, boolean isDepth) {
+        this.warning = warning;
+        this.description = description;
+        this.guide = guide;
+        this.position = position;
+        this.yoloObjects = yoloObjects;
+        this.rgbShape = rgbShape;
+        this.isDepth = isDepth;
+    }
+
+
     @Data
     public static class Position {
         private double speed;

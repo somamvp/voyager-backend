@@ -1,5 +1,7 @@
 package somaMVP.domain.gps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.stream.MapRecord;
@@ -7,6 +9,7 @@ import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StreamOperations;
 import org.springframework.stereotype.Service;
+import somaMVP.domain.file.ObjectDto;
 import somaMVP.domain.gis.Gis;
 import somaMVP.domain.gis.GisDto;
 import somaMVP.domain.gis.GisDtos;
@@ -16,7 +19,9 @@ import somaMVP.domain.utils.Location;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -26,12 +31,18 @@ import java.util.stream.Collectors;
 public class GpsService {
     public final RedisTemplate<String, Object> redisTemplate;
     public final UserGpsRepository userGpsRepository;
+    public final YoloRepository yoloRepository;
     public final EntityManager entityManager;
 
     public String createGps(String gpsId) {
         UserGps userGps = new UserGps(gpsId);
         userGpsRepository.save(userGps);
         return userGpsRepository.save(userGps).getId();
+    }
+    public String uploadYoloResult(String id, String yoloDto){
+        ObjectDto objectDto = new ObjectDto(id, yoloDto);
+        yoloRepository.save(objectDto);
+        return id;
     }
 
     public GisDtos nearZebra(Double gpsY, Double gpsX, Double distance){
@@ -66,6 +77,18 @@ public class GpsService {
         StreamOperations<String, Object, Object> streamOperations = redisTemplate.opsForStream();
         log.info("userGpsDto.toMap(id) = " + updateGpsDto.toMap(id));
         streamOperations.add(id, updateGpsDto.toMap(id));
+        streamOperations.trim(id, 6);
+        return id;
+    }
+    public String uploadRedis(String id, Object yoloResultObject) throws JsonProcessingException {
+        StreamOperations<String, Object, Object> streamOperations = redisTemplate.opsForStream();
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", id);
+        // yoloResultObject to Map
+        map.put("yoloResult", gson.toJson(yoloResultObject));
+        log.info("yoloResultMap = " + map);
+        streamOperations.add(id, map);
         streamOperations.trim(id, 6);
         return id;
     }

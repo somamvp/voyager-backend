@@ -48,3 +48,5 @@ docker-elk-kor/
 scripts/*
 src/main/resources/static/
 img/
+/src/main/java/somaMVP/domain/file/LogExample.java
+/src/main/java/somaMVP/domain/file/ObjectDto.java
