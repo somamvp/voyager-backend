@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class GpsService {
     public final RedisTemplate<String, Object> redisTemplate;
     public final UserGpsRepository userGpsRepository;
-    public final YoloRepository yoloRepository;
+    public final RedisRepository redisRepository;
     public final EntityManager entityManager;
 
     public String createGps(String gpsId) {
@@ -39,9 +39,9 @@ public class GpsService {
         userGpsRepository.save(userGps);
         return userGpsRepository.save(userGps).getId();
     }
-    public String uploadYoloResult(String id, String yoloDto){
+    public String saveRedisState(String id, String yoloDto){
         ObjectDto objectDto = new ObjectDto(id, yoloDto);
-        yoloRepository.save(objectDto);
+        redisRepository.save(objectDto);
         return id;
     }
 

@@ -27,7 +27,7 @@ public class GpsController {
         String gpsId = gpsService.createGps(session.getId());
         session.setAttribute(SessionConst.GPS_ID, gpsId);
         Object create = fileService.create();
-        gpsService.uploadYoloResult(gpsId, new Gson().toJson(create));
+        gpsService.saveRedisState(gpsId, new Gson().toJson(create));
         log.info("create sessionId: {}", gpsId);
         return gpsId; // null이면 안됨.
     }

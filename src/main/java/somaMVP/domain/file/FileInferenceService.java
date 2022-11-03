@@ -28,8 +28,8 @@ public class FileInferenceService {
                 .block();
     }
 
-    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, String gpsInfo) {
-        MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생함
+    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, String gpsInfo, Boolean crossStart, Boolean shouldLightExist) {
+        MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생
         builder.part("session_id", gpsId);
         builder.part("source", file.getResource());
 
@@ -39,6 +39,13 @@ public class FileInferenceService {
         if (isRotate != null) {
             builder.part("is_rot", isRotate);
         }
+        if (crossStart != null) {
+            builder.part("cross_start", crossStart);
+        }
+        if (shouldLightExist != null) {
+            builder.part("should_light_exist", shouldLightExist);
+        }
+
         return WebClient.create(ML_URL)
                 .post()
                 .uri("/upload")
@@ -57,5 +64,6 @@ public class FileInferenceService {
                 .retrieve()
                 .bodyToMono(Object.class)
                 .block();
+        // redis에 state 저장 하는 로직 필요 똑같은데 cs만 올거임.
     }
 }

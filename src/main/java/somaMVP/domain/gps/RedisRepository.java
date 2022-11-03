@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import somaMVP.domain.file.ObjectDto;
 
 
-public interface YoloRepository extends CrudRepository<ObjectDto, String> {
+public interface RedisRepository extends CrudRepository<ObjectDto, String> {
 
 }

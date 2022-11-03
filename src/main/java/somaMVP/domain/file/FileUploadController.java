@@ -22,9 +22,22 @@ import java.util.List;
 @RequestMapping("/api/v1/files")
 public class FileUploadController {
     public final FileServiceImpl fileService;
+    private final FileInferenceService inferenceService;
     public final GpsService gpsService;
     public final ImageResponse imageResponse;
     public final FileInferenceService fileInferenceService;
+
+    @GetMapping("/create")
+    public String sessionCreate(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String gpsId = gpsService.createGps(session.getId());
+        session.setAttribute(SessionConst.GPS_ID, gpsId);
+        Object create = inferenceService.create();
+        gpsService.saveRedisState(gpsId, new Gson().toJson(create));
+        log.info("create sessionId: {}", gpsId);
+        return gpsId; // null이면 안됨.
+    }
+
     @PostMapping("/upload")
     public ImageResponse uploadFile(@RequestParam("source") MultipartFile file){
         log.info("POST /upload 요청 {}회 받음", ++imageResponse.sequenceNo);
@@ -35,14 +48,18 @@ public class FileUploadController {
     @PostMapping("/ml/upload")
     public Object inference(HttpServletRequest request,
                                   @RequestParam("source") MultipartFile file, @RequestParam(value = "is_rot", required = false) Boolean isRotate,
-                                  @RequestParam(value = "gps_info", required = false) String gpsInfo) {
+                                  @RequestParam(value = "gps_info", required = false) String gpsInfo, @RequestParam(value = "cross_start", required = false) Boolean crossStart,
+                                  @RequestParam(value = "should_light_exist", required = false) Boolean shouldLightExist) {
+        // cross_start boolean 없을 수 있음.
+        // should_light_exist
+
         // 세션 아이디 없으면 생성, 있으면 가져오기
         HttpSession session = request.getSession();
         String gpsId = gpsService.createGps(session.getId());
         session.setAttribute(SessionConst.GPS_ID, gpsId);
 
         // ML inference 호출
-        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, gpsInfo);
+        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, gpsInfo, crossStart, shouldLightExist);
         assert inferenceResult != null;
 
         // ML inference 결과를 배열로 변환
@@ -57,7 +74,7 @@ public class FileUploadController {
         // ML inference 결과 로깅 및 Redis 저장
         String yoloResultString = new Gson().toJson(yoloResult);
         log.info("inferenceResult: {}", yoloResultString);
-        gpsService.uploadYoloResult(gpsId, logRedis.toString());
+        gpsService.saveRedisState(gpsId, logRedis.toString());
         return appResult;
     }
 
