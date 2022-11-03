@@ -6,7 +6,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Data
 @Getter
-@RedisHash(value = "yolo")
+@RedisHash(value = "state", timeToLive = 300)
 public class ObjectDto {
     public String id;
     public String yoloResult;
