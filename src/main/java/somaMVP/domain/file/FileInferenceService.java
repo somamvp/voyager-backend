@@ -3,13 +3,16 @@ package somaMVP.domain.file;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
 import java.time.Duration;
 
 @Slf4j
@@ -18,6 +21,11 @@ import java.time.Duration;
 public class FileInferenceService {
     @Value("${AWS_ML_URL}")
     public String ML_URL;
+
+    public final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+            .codecs(configurer -> configurer.defaultCodecs()
+                    .maxInMemorySize(10 * 1024 * 1024)
+            ).build();
 
     public String test() {
         return WebClient.create(ML_URL)
@@ -46,9 +54,12 @@ public class FileInferenceService {
             builder.part("should_light_exist", shouldLightExist);
         }
 
-        return WebClient.create(ML_URL)
+        return WebClient
+                .builder()
+                .exchangeStrategies(exchangeStrategies)
+                .build()
                 .post()
-                .uri("/upload")
+                .uri(ML_URL + "/upload")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
@@ -65,5 +76,14 @@ public class FileInferenceService {
                 .bodyToMono(Object.class)
                 .block();
         // redis에 state 저장 하는 로직 필요 똑같은데 cs만 올거임.
+    }
+    @Bean
+    public WebClient getWebClientBuilder(){
+        return   WebClient.builder().exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer -> configurer
+                                .defaultCodecs()
+                                .maxInMemorySize(16 * 1024 * 1024))
+                        .build())
+                .build();
     }
 }
