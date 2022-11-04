@@ -36,7 +36,7 @@ public class FileInferenceService {
                 .block();
     }
 
-    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, String gpsInfo, Boolean crossStart, Boolean shouldLightExist) {
+    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, Integer sequenceNumber, String gpsInfo, Boolean crossStart, Boolean shouldLightExist) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생
         builder.part("session_id", gpsId);
         builder.part("source", file.getResource());
@@ -46,6 +46,9 @@ public class FileInferenceService {
         }
         if (isRotate != null) {
             builder.part("is_rot", isRotate);
+        }
+        if (sequenceNumber != null) {
+            builder.part("sequence_number", sequenceNumber);
         }
         if (crossStart != null) {
             builder.part("cross_start", crossStart);
