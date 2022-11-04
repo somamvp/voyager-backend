@@ -48,6 +48,7 @@ public class FileUploadController {
     @PostMapping("/ml/upload")
     public Object inference(HttpServletRequest request,
                                   @RequestParam("source") MultipartFile file, @RequestParam(value = "is_rot", required = false) Boolean isRotate,
+                                  @RequestParam(value = "sequence_number", required = false) Integer sequenceNumber,
                                   @RequestParam(value = "gps_info", required = false) String gpsInfo, @RequestParam(value = "cross_start", required = false) Boolean crossStart,
                                   @RequestParam(value = "should_light_exist", required = false) Boolean shouldLightExist) {
         // cross_start boolean 없을 수 있음.
@@ -59,7 +60,7 @@ public class FileUploadController {
         session.setAttribute(SessionConst.GPS_ID, gpsId);
 
         // ML inference 호출
-        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, gpsInfo, crossStart, shouldLightExist);
+        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, sequenceNumber, gpsInfo, crossStart, shouldLightExist);
         assert inferenceResult != null;
 
         // ML inference 결과를 배열로 변환
