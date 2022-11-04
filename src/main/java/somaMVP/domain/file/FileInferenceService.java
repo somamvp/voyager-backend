@@ -42,7 +42,7 @@ public class FileInferenceService {
         builder.part("source", file.getResource());
 
         if (gpsInfo != null) {
-            builder.part("gps", gpsInfo);
+            builder.part("gps_info", gpsInfo);
         }
         if (isRotate != null) {
             builder.part("is_rot", isRotate);
