@@ -9,10 +9,10 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash(value = "state", timeToLive = 300)
 public class ObjectDto {
     public String id;
-    public String yoloResult;
+    public String stateResult;
 
     public ObjectDto(String id, String yoloResult) {
         this.id = id;
-        this.yoloResult = yoloResult;
+        this.stateResult = yoloResult;
     }
 }
