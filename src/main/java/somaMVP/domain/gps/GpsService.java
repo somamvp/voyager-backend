@@ -41,7 +41,7 @@ public class GpsService {
     }
     public String saveRedisState(String id, String yoloDto){
         ObjectDto objectDto = new ObjectDto(id, yoloDto);
-        redisRepository.save(objectDto);
+        redisRepository.save(new Gson().toJson(objectDto));
         return id;
     }
 
