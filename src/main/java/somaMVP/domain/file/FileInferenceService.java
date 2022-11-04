@@ -48,7 +48,7 @@ public class FileInferenceService {
             builder.part("is_rot", isRotate);
         }
         if (sequenceNumber != null) {
-            builder.part("sequence_number", sequenceNumber);
+            builder.part("sequence_no", sequenceNumber);
         }
         if (crossStart != null) {
             builder.part("cross_start", crossStart);

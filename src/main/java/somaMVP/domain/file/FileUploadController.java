@@ -48,7 +48,7 @@ public class FileUploadController {
     @PostMapping("/ml/upload")
     public Object inference(HttpServletRequest request,
                                   @RequestParam("source") MultipartFile file, @RequestParam(value = "is_rot", required = false) Boolean isRotate,
-                                  @RequestParam(value = "sequence_number", required = false) Integer sequenceNumber,
+                                  @RequestParam(value = "sequence_no", required = false) Integer sequenceNumber,
                                   @RequestParam(value = "gps_info", required = false) String gpsInfo, @RequestParam(value = "cross_start", required = false) Boolean crossStart,
                                   @RequestParam(value = "should_light_exist", required = false) Boolean shouldLightExist) {
         // cross_start boolean 없을 수 있음.
@@ -76,8 +76,6 @@ public class FileUploadController {
         String yoloResultString = new Gson().toJson(yoloResult);
         String stateResultString = new Gson().toJson(stateRedis);
         log.info("inferenceResult: {}", yoloResultString);
-        log.info("stateResult: {}", stateResultString);
-        log.info("stateResult: {}", stateRedis);
         gpsService.saveRedisState(gpsId, stateResultString);
         return appResult;
     }
