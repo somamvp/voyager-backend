@@ -68,15 +68,14 @@ public class FileUploadController {
 
         // ML inference 결과 반환
         Object appResult = block.get(0); // app 리턴 값.
-        Object yoloResult = block.get(1); // yolo 결과
-        Object logRedis = block.get(2); // redis에 저장할 로그
+        Object yoloResult = block.get(1); // yolo 결과 로깅
+        Object stateRedis = block.get(2); // redis에 저장할 상태
 
         // ML inference 결과 로깅 및 Redis 저장
         String yoloResultString = new Gson().toJson(yoloResult);
+        String stateResultString = new Gson().toJson(stateRedis);
         log.info("inferenceResult: {}", yoloResultString);
-        gpsService.saveRedisState(gpsId, logRedis.toString());
-        log.info("logRedis: {}", logRedis);
-        log.info("appResult: {}", new Gson().toJson(logRedis));
+        gpsService.saveRedisState(gpsId, stateResultString);
         return appResult;
     }
 
