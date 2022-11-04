@@ -76,6 +76,8 @@ public class FileUploadController {
         String yoloResultString = new Gson().toJson(yoloResult);
         String stateResultString = new Gson().toJson(stateRedis);
         log.info("inferenceResult: {}", yoloResultString);
+        log.info("stateResult: {}", stateResultString);
+        log.info("stateResult: {}", stateRedis);
         gpsService.saveRedisState(gpsId, stateResultString);
         return appResult;
     }
