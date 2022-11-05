@@ -78,7 +78,6 @@ public class FileInferenceService {
                 .retrieve()
                 .bodyToMono(Object.class)
                 .block();
-        // redis에 state 저장 하는 로직 필요 똑같은데 cs만 올거임.
     }
     @Bean
     public WebClient getWebClientBuilder(){

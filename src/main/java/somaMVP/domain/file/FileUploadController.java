@@ -51,9 +51,6 @@ public class FileUploadController {
                                   @RequestParam(value = "sequence_no", required = false) Integer sequenceNumber,
                                   @RequestParam(value = "gps_info", required = false) String gpsInfo, @RequestParam(value = "cross_start", required = false) Boolean crossStart,
                                   @RequestParam(value = "should_light_exist", required = false) Boolean shouldLightExist) {
-        // cross_start boolean 없을 수 있음.
-        // should_light_exist
-
         // 세션 아이디 없으면 생성, 있으면 가져오기
         HttpSession session = request.getSession();
         String gpsId = gpsService.createGps(session.getId());
