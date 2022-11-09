@@ -83,10 +83,4 @@ public class FileUploadController {
     public String test() {
         return fileInferenceService.test();
     }
-
-    @GetMapping("/logging")
-    public LogExample logging(@RequestBody LogExample logExample) {
-        log.info("inferenceResult: {}", new Gson().toJson(logExample));
-        return logExample;
-    }
 }
