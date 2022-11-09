@@ -1,6 +1,5 @@
 package somaMVP.domain.gps;
 
-import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +20,6 @@ import javax.validation.Valid;
 public class GpsController {
     private final GpsService gpsService;
     private final FileInferenceService fileService;
-    @GetMapping("/create")
-    public String createGps(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String gpsId = gpsService.createGps(session.getId());
-        session.setAttribute(SessionConst.GPS_ID, gpsId);
-        Object create = fileService.create();
-        gpsService.saveRedisState(gpsId, new Gson().toJson(create));
-        log.info("create sessionId: {}", gpsId);
-        return gpsId; // null이면 안됨.
-    }
 
     // SessionAttribute를 사용하면 세션에 저장된 값을 파라미터로 받을 수 있음. 대신 새로 생성하지는 않음.
     @PostMapping("/update") // TODO redis pub/sub 기능으로 리팩토링

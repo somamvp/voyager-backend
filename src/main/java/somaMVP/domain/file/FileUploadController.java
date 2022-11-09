@@ -27,12 +27,13 @@ public class FileUploadController {
     public final ImageResponse imageResponse;
     public final FileInferenceService fileInferenceService;
 
-    @GetMapping("/create")
-    public String sessionCreate(HttpServletRequest request) {
+    @PostMapping ("/create")
+    public String sessionCreate(HttpServletRequest request,
+                                @RequestParam(value = "settings", required = false) String settings) {
         HttpSession session = request.getSession();
         String gpsId = gpsService.createGps(session.getId());
         session.setAttribute(SessionConst.GPS_ID, gpsId);
-        Object create = inferenceService.create();
+        Object create = inferenceService.create(settings);
         gpsService.saveRedisState(gpsId, new Gson().toJson(create));
         log.info("create sessionId: {}", gpsId);
         return gpsId; // null이면 안됨.
@@ -50,14 +51,15 @@ public class FileUploadController {
                                   @RequestParam("source") MultipartFile file, @RequestParam(value = "is_rot", required = false) Boolean isRotate,
                                   @RequestParam(value = "sequence_no", required = false) Integer sequenceNumber,
                                   @RequestParam(value = "gps_info", required = false) String gpsInfo, @RequestParam(value = "cross_start", required = false) Boolean crossStart,
-                                  @RequestParam(value = "should_light_exist", required = false) Boolean shouldLightExist) {
+                                  @RequestParam(value = "should_light_exist", required = false) Boolean shouldLightExist,
+                                  @RequestParam(value = "device_description", required = false) String deviceDescription) {
         // 세션 아이디 없으면 생성, 있으면 가져오기
         HttpSession session = request.getSession();
         String gpsId = gpsService.createGps(session.getId());
         session.setAttribute(SessionConst.GPS_ID, gpsId);
 
         // ML inference 호출
-        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, sequenceNumber, gpsInfo, crossStart, shouldLightExist);
+        Mono<Object> inferenceResult = fileInferenceService.mlUpload(gpsId, file, isRotate, sequenceNumber, gpsInfo, crossStart, shouldLightExist, deviceDescription);
         assert inferenceResult != null;
 
         // ML inference 결과를 배열로 변환
