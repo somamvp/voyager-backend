@@ -37,8 +37,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.7.3' // Redis
 	implementation 'org.springframework.session:spring-session-data-redis:2.7.0' // Redis Session
 	implementation 'org.locationtech.jts:jts-core:1.19.0'
+	implementation 'com.googlecode.json-simple:json-simple:1.1'
+	implementation 'org.geotools:gt-geojson:27.0'
+	implementation 'org.geotools:gt-geojsondatastore:27.0'
+	implementation 'org.n52.jackson.datatype:jackson-datatype-jts:2.12.0'
+	implementation 'de.grundid.opendatalab:geojson-jackson:1.14'
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly("org.springframework.boot:spring-boot-devtools")
+
 
 //	runtimeOnly 'com.h2database:h2' // H2 DB
 

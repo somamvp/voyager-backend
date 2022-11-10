@@ -28,7 +28,6 @@ public class GpsController {
         return gpsService.updateGps(gpsId, updateGpsDto);
     }
 
-
     @PostMapping("/report")
     public GisDtos reportGps(@RequestBody @Valid UserGpsDto userGpsDto) {
         Double distance = userGpsDto.getDistance();
