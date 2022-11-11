@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class Signal {
     @Id
     @Column(nullable = false)
+    private String length;
     private String id; // 횡단보도 아이디
     private Integer pedSig; // 보행자 신호등 여부
 }

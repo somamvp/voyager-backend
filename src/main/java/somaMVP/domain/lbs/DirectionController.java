@@ -1,8 +1,6 @@
 package somaMVP.domain.lbs;
 
 import com.google.gson.Gson;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +23,8 @@ public class DirectionController {
     @PostMapping("/getDirections")
     public Object getDirection(@RequestBody DirectionDto directionDto) {
         HashMap<String, Object> direction = (HashMap<String, Object>) directionService.getDirection(directionDto);
+        HashMap<Object, Object> resultMap = new HashMap<>();
+        Object type = direction.get("type");
         List<Object> featuresList = (List<Object>) direction.get("features");
         Gson gson = new Gson();
 
@@ -33,38 +33,31 @@ public class DirectionController {
                 Object o = featuresList.get(i);
                 LineDto lineDto = gson.fromJson(gson.toJson(o), LineDto.class);
                 Optional<String> pathType = Optional.ofNullable(lineDto.getProperties().getPathType());
+                int finalI = i;
                 pathType.ifPresentOrElse(
                         s -> {
                             if (s.equals("1")) {
-                                MyDouble myDouble = new MyDouble();
-                                lineDto.getGeometry().getCoordinates().forEach(
-                                        coordinates -> coordinates.forEach(
-                                                coordinate -> {
-                                                    int intValue = coordinate.intValue();
+                                double length = lineDto.getProperties().getLength();
+                                Optional<Signal> byId = signalRepository.findById(String.valueOf(length));
 
-                                                    if(intValue == 126 || intValue == 127 || intValue == 128){
-                                                        myDouble.sumX += coordinate;
-                                                    }else{
-                                                        myDouble.sumY += coordinate;
-                                                    }
-                                                }
-                                        )
-                                );
-                                log.info("횡단보도");
-                                log.info("x : " + String.format("%.14f", myDouble.sumX / 2));
-                                log.info("y : " + String.format("%.14f", myDouble.sumY / 2));
+                                byId.ifPresent(signal -> {
+                                    if (signal.getPedSig() == 1) {
+                                        log.info("신호등 있는 횡단보도");
+                                        lineDto.getProperties().setPedSignal("1");
+
+                                    } else if(signal.getPedSig() == 0) {
+                                        log.info("신호등 없는 횡단보도");
+                                        lineDto.getProperties().setPedSignal("0");
+                                    }
+                                });
+                                featuresList.set(finalI, lineDto);
                             }
                         },
                         () -> log.info("신호등 유무 알수 없음"));
             }
         }
-        return direction;
+        resultMap.put("type", type);
+        resultMap.put("features", featuresList);
+        return resultMap;
     }
-}
-
-@Data
-@NoArgsConstructor
-class MyDouble{
-    public Double sumX = 0.0;
-    public Double sumY = 0.0;
 }

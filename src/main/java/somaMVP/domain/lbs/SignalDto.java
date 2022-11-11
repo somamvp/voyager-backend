@@ -15,5 +15,5 @@ public class SignalDto {
     @NotNull
     private String id; // 횡단보도 아이디
     private Integer pedSignal; // 보행자 신호등 여부
-    private Integer AVG;
+    private Double length;
 }
