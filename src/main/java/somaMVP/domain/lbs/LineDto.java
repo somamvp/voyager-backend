@@ -23,7 +23,7 @@ public class LineDto {
         private int time;
         private String crossingType;
         private String pathType;
-        @JsonProperty("srid")
+        @JsonProperty("srid") // json의 srid를 srid로 매핑
         private int srId;
         private int incline;
         private double length;
