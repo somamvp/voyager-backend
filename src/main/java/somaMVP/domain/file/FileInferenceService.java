@@ -36,11 +36,10 @@ public class FileInferenceService {
                 .block();
     }
 
-    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, Integer sequenceNumber, String gpsInfo, Boolean crossStart, Boolean shouldLightExist) {
+    public Mono<Object> mlUpload(String gpsId, MultipartFile file, Boolean isRotate, Integer sequenceNumber, String gpsInfo, Boolean crossStart, Boolean shouldLightExist, String deviceDescription) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발생
         builder.part("session_id", gpsId);
         builder.part("source", file.getResource());
-
         if (gpsInfo != null) {
             builder.part("gps_info", gpsInfo);
         }
@@ -56,9 +55,11 @@ public class FileInferenceService {
         if (shouldLightExist != null) {
             builder.part("should_light_exist", shouldLightExist);
         }
+        if (deviceDescription != null) {
+            builder.part("device_description", deviceDescription);
+        }
 
-        return WebClient
-                .builder()
+        return WebClient.builder()
                 .exchangeStrategies(exchangeStrategies)
                 .build()
                 .post()
@@ -70,13 +71,21 @@ public class FileInferenceService {
                 .timeout(Duration.ofMillis(5000));
     }
 
-    public Object create() {
+    public Object create(String settings) {
+        MultipartBodyBuilder builder = new MultipartBodyBuilder(); // 여기 없으면 이슈가 발
+        if(settings != null) {
+            builder.part("settings", settings);
+        }
         return WebClient.builder()
+                .exchangeStrategies(exchangeStrategies)
                 .build()
-                .get()
+                .post()
                 .uri(ML_URL + "/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .bodyToMono(Object.class)
+                .timeout(Duration.ofMillis(5000))
                 .block();
     }
     @Bean
