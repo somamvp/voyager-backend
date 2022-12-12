@@ -13,9 +13,9 @@ git clone --recurse-submodules https://github.com/somamvp/voyager-backend.git
 cd voyager-backend
 
 # Need to docker-compose up first to create the database
-docker-compose up --build
+docker-compose build && docker-compose up
 
-# Dump the database and load the data
+# (Option)Dump the database and load the data
 mysqldump  --single-transaction --databases local-db -u root -p > local-db.sql
 mysql -u root -p < local-db.sql
 ```

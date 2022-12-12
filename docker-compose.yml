@@ -31,9 +31,9 @@ services:
 
   spring:
     container_name: voyager-backend-dev
-#    build: .
+    #    build: .
     image: juwon8891/voyager-be:0.1-amd
-#    image: juwon8891/voyager-be:0.1-arm
+    #    image: juwon8891/voyager-be:0.1-arm
     ports:
       - "8080:8080"
     environment:

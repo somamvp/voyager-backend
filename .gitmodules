@@ -1,3 +1,6 @@
 [submodule "security"]
 	path = security
 	url = https://github.com/juwon8891/security.git
+[submodule "ELK-stack"]
+	path = ELK-stack
+	url = https://github.com/somamvp/ELK-stack.git
