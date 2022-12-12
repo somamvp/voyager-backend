@@ -47,5 +47,9 @@ db/
 docker-elk-kor/
 scripts/*
 src/main/resources/static/
+<<<<<<< HEAD
 img/
 *.gz
+=======
+#img/
+>>>>>>> f4a3c53c703b4e8b50d746bb73a165d8f3b90348
